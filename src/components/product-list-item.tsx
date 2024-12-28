@@ -1,12 +1,22 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+    Dimensions,
+    Image,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
 
 import { Product } from "../../assets/types/product";
 import { Link } from "expo-router";
 
+const screenWidth = Dimensions.get("window").width; // Get screen width
+const itemWidth = (screenWidth - 40) / 3; // Subtract padding and divide by 3
+
 export const ProductListItem = ({ product }: { product: Product }) => {
     return (
         <Link asChild href={`/product/${product.slug}`}>
-            <Pressable style={styles.item}>
+            <Pressable style={[styles.item, { width: itemWidth }]}>
                 <View style={styles.itemImageContainer}>
                     <Image
                         source={product.heroImage}
@@ -36,11 +46,13 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: "100%",
         height: 150,
+        overflow: "hidden",
     },
     itemImage: {
         width: "100%",
         height: "100%",
         resizeMode: "cover",
+        borderRadius: 15,
     },
     itemTextContainer: {
         padding: 8,

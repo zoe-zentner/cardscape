@@ -37,7 +37,7 @@ const Home = () => {
                                 <ProductListItem product={item} />
                             )}
                             keyExtractor={(product) => product.id.toString()}
-                            numColumns={2} // Set number of columns for the products in each category
+                            numColumns={4} // Set number of columns for the products in each category
                             columnWrapperStyle={styles.flatListColumn}
                             showsVerticalScrollIndicator={false}
                         />
