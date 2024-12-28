@@ -13,8 +13,8 @@ export default function RootLayout() {
             />
 
             <Stack.Screen
-                name="series"
-                options={{ headerShown: true, title: "Series" }}
+                name="categories"
+                options={{ headerShown: true, title: "Categories" }}
             />
 
             <Stack.Screen

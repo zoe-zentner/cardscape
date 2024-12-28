@@ -122,4 +122,18 @@ export const PRODUCTS: Product[] = [
         },
         maxQuantity: 8,
     },
+    {
+        id: 8,
+        title: "Hiirono",
+        slug: "hirono",
+        heroImage: require("../assets/characters/hirono trial.png"),
+        imagesUrl: [require("../assets/characters/hirono trial.png")],
+        price: 899.99,
+        category: {
+            imageUrl: require("../assets/characters/box_img.webp"),
+            name: "Pops",
+            slug: "pops",
+        },
+        maxQuantity: 5,
+    },
 ];

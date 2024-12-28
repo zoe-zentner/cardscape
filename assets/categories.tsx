@@ -3,6 +3,14 @@ import { PRODUCTS } from "./products";
 
 export const CATEGORIES: Category[] = [
     {
+        name: "Pops",
+        slug: "pops",
+        imageUrl: "https://via.placeholder.com/40",
+        products: PRODUCTS.filter(
+            (product) => product.category.slug === "pops"
+        ),
+    },
+    {
         name: "Laptops",
         slug: "laptops",
         imageUrl:
