@@ -152,7 +152,11 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         marginBottom: 8,
     },
-    categoryText: {},
+    categoryText: {
+        textAlign: "center",
+        width: 70,
+        flexWrap: "wrap",
+    },
     badgeContainer: {
         position: "absolute",
         top: -5,

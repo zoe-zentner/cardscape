@@ -5,7 +5,8 @@ export const CATEGORIES: Category[] = [
     {
         name: "Pops",
         slug: "pops",
-        imageUrl: "https://via.placeholder.com/40",
+        imageUrl:
+            "https://raw.githubusercontent.com/zent-z/rn-cards/refs/heads/main/assets/characters/box_img.webp",
         products: PRODUCTS.filter(
             (product) => product.category.slug === "pops"
         ),
