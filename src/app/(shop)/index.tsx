@@ -57,7 +57,7 @@ const Home = () => {
 const styles = StyleSheet.create({
     screenContainer: {
         flex: 1,
-        backgroundColor: "beige",
+        backgroundColor: "#f5f5f5",
     },
     flatListContent: {
         paddingBottom: 20,

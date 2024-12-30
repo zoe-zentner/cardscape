@@ -19,30 +19,60 @@ export const CATEGORIES: Category[] = [
         ),
     },
     {
+        name: "Little Mischief",
+        slug: "little mischief",
+        imageUrl: "https://via.placeholder.com/40",
+        products: PRODUCTS.filter(
+            (product) => product.category.slug === "little-mischief"
+        ),
+    },
+    {
+        name: "City Of Mercy",
+        slug: "city of mercy",
+        imageUrl: "https://via.placeholder.com/40",
+        products: PRODUCTS.filter(
+            (product) => product.category.slug === "city-of-mercy"
+        ),
+    },
+    {
+        name: "MIME",
+        slug: "mime",
+        imageUrl: "https://via.placeholder.com/40",
+        products: PRODUCTS.filter(
+            (product) => product.category.slug === "mime"
+        ),
+    },
+    {
+        name: "reshape",
+        slug: "reshape",
+        imageUrl: "https://via.placeholder.com/40",
+        products: PRODUCTS.filter(
+            (product) => product.category.slug === "mime"
+        ),
+    },
+    {
+        name: "shelter",
+        slug: "shelter",
+        imageUrl: "https://via.placeholder.com/40",
+        products: PRODUCTS.filter(
+            (product) => product.category.slug === "mime"
+        ),
+    },
+    {
+        name: "Le Petit Prince",
+        slug: "le petit prince",
+        imageUrl: "https://via.placeholder.com/40",
+        products: PRODUCTS.filter(
+            (product) => product.category.slug === "mime"
+        ),
+    },
+    {
         name: "Phones",
         slug: "phones",
         imageUrl:
             "https://images.pexels.com/photos/40739/mobile-phone-smartphone-tablet-white-40739.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
         products: PRODUCTS.filter(
             (product) => product.category.slug === "phones"
-        ),
-    },
-    {
-        name: "Gaming",
-        slug: "gaming",
-        imageUrl:
-            "https://images.pexels.com/photos/275033/pexels-photo-275033.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        products: PRODUCTS.filter(
-            (product) => product.category.slug === "gaming"
-        ),
-    },
-    {
-        name: "Accessories",
-        slug: "accessories",
-        imageUrl:
-            "https://images.pexels.com/photos/577769/pexels-photo-577769.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        products: PRODUCTS.filter(
-            (product) => product.category.slug === "accessories"
         ),
     },
 ];
