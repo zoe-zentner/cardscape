@@ -11,12 +11,11 @@ export const CATEGORIES: Category[] = [
         ),
     },
     {
-        name: "Laptops",
-        slug: "laptops",
-        imageUrl:
-            "https://images.pexels.com/photos/129208/pexels-photo-129208.jpeg",
+        name: "The Other One",
+        slug: "the other one",
+        imageUrl: "https://via.placeholder.com/40",
         products: PRODUCTS.filter(
-            (product) => product.category.slug === "laptops"
+            (product) => product.category.slug === "the other one"
         ),
     },
     {
