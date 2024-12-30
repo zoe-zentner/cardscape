@@ -14,7 +14,8 @@ export const CATEGORIES: Category[] = [
     {
         name: "The Other One",
         slug: "the other one",
-        imageUrl: "https://via.placeholder.com/40",
+        imageUrl:
+            "https://github.com/zent-z/rn-cards/blob/main/assets/images/the-other-one.jpg?raw=true",
         products: PRODUCTS.filter(
             (product) => product.category.slug === "the other one"
         ),
@@ -22,7 +23,8 @@ export const CATEGORIES: Category[] = [
     {
         name: "Little Mischief",
         slug: "little mischief",
-        imageUrl: "https://via.placeholder.com/40",
+        imageUrl:
+            "https://raw.githubusercontent.com/zent-z/rn-cards/refs/heads/main/assets/images/little-mischief.webp",
         products: PRODUCTS.filter(
             (product) => product.category.slug === "little-mischief"
         ),
@@ -30,7 +32,8 @@ export const CATEGORIES: Category[] = [
     {
         name: "City Of Mercy",
         slug: "city of mercy",
-        imageUrl: "https://via.placeholder.com/40",
+        imageUrl:
+            "https://github.com/zent-z/rn-cards/blob/main/assets/images/city-of-mercy.jpeg?raw=true",
         products: PRODUCTS.filter(
             (product) => product.category.slug === "city-of-mercy"
         ),
@@ -38,7 +41,8 @@ export const CATEGORIES: Category[] = [
     {
         name: "MIME",
         slug: "mime",
-        imageUrl: "https://via.placeholder.com/40",
+        imageUrl:
+            "https://github.com/zent-z/rn-cards/blob/main/assets/images/mime.jpeg?raw=true",
         products: PRODUCTS.filter(
             (product) => product.category.slug === "mime"
         ),
@@ -46,25 +50,28 @@ export const CATEGORIES: Category[] = [
     {
         name: "reshape",
         slug: "reshape",
-        imageUrl: "https://via.placeholder.com/40",
+        imageUrl:
+            "https://github.com/zent-z/rn-cards/blob/main/assets/images/reshape.jpg?raw=true",
         products: PRODUCTS.filter(
-            (product) => product.category.slug === "mime"
+            (product) => product.category.slug === "reshape"
         ),
     },
     {
         name: "shelter",
         slug: "shelter",
-        imageUrl: "https://via.placeholder.com/40",
+        imageUrl:
+            "https://github.com/zent-z/rn-cards/blob/main/assets/images/shelter.jpg?raw=true",
         products: PRODUCTS.filter(
-            (product) => product.category.slug === "mime"
+            (product) => product.category.slug === "shelter"
         ),
     },
     {
         name: "Le Petit Prince",
         slug: "le petit prince",
-        imageUrl: "https://via.placeholder.com/40",
+        imageUrl:
+            "https://raw.githubusercontent.com/zent-z/rn-cards/refs/heads/main/assets/images/le-petit-prince.webp",
         products: PRODUCTS.filter(
-            (product) => product.category.slug === "mime"
+            (product) => product.category.slug === "le petit prince"
         ),
     },
     {
