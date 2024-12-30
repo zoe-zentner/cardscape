@@ -325,4 +325,18 @@ export const PRODUCTS: Product[] = [
         },
         maxQuantity: 5,
     },
+    {
+        id: 23,
+        title: "png img",
+        slug: "adventure-time",
+        heroImage: require("../assets/characters/adventure-time.png"),
+        imagesUrl: [require("../assets/characters/adventure-time.png")],
+        price: 899.99,
+        category: {
+            imageUrl: require("../assets/characters/box_img.webp"),
+            name: "Pops",
+            slug: "pops",
+        },
+        maxQuantity: 5,
+    },
 ];

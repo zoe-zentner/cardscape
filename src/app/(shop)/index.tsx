@@ -24,7 +24,7 @@ const Home = () => {
     };
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.screenContainer}>
             <FlatList
                 ref={flatListRef}
                 data={groupedProducts}
@@ -55,6 +55,10 @@ const Home = () => {
 };
 
 const styles = StyleSheet.create({
+    screenContainer: {
+        flex: 1,
+        backgroundColor: "beige",
+    },
     flatListContent: {
         paddingBottom: 20,
     },
