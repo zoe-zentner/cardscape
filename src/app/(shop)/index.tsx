@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     flatListColumn: {
-        justifyContent: "space-between",
+        justifyContent: "flex-start",
     },
 });
 
