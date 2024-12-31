@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     },
     flatListColumn: {
         justifyContent: "flex-start",
+        gap: 6.5,
     },
 });
 
