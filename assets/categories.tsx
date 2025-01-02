@@ -26,7 +26,7 @@ export const CATEGORIES: Category[] = [
         imageUrl:
             "https://raw.githubusercontent.com/zent-z/rn-cards/refs/heads/main/assets/images/little-mischief.webp",
         products: PRODUCTS.filter(
-            (product) => product.category.slug === "little-mischief"
+            (product) => product.category.slug === "little mischief"
         ),
     },
     {
@@ -35,7 +35,7 @@ export const CATEGORIES: Category[] = [
         imageUrl:
             "https://github.com/zent-z/rn-cards/blob/main/assets/images/city-of-mercy.jpeg?raw=true",
         products: PRODUCTS.filter(
-            (product) => product.category.slug === "city-of-mercy"
+            (product) => product.category.slug === "city of mercy"
         ),
     },
     {

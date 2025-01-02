@@ -4,7 +4,6 @@ import {
     Text,
     View,
     Image,
-    ScrollView,
     FlatList,
     TouchableOpacity,
 } from "react-native";
@@ -88,7 +87,7 @@ const styles = StyleSheet.create({
     relatedTitle: {
         fontSize: 20,
         fontWeight: "bold",
-        marginTop: "10%", // Increase the top margin to push it further down
+        marginTop: "12%", // Increase the top margin to push it further down
         marginBottom: 10,
     },
     relatedProductsContainer: {

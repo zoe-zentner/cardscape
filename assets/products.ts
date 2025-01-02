@@ -4,7 +4,7 @@ export const PRODUCTS: Product[] = [
     {
         id: 1,
         title: "The fox",
-        slug: "the-fox",
+        slug: "the fox",
         heroImage: require("../assets/characters/the-other-one/the-fox.png"),
         imagesUrl: [require("../assets/characters/the-other-one/the-fox.png")],
         price: 899.99,
@@ -18,7 +18,7 @@ export const PRODUCTS: Product[] = [
     {
         id: 2,
         title: "The monster",
-        slug: "the-monster",
+        slug: "the monster",
         heroImage: require("../assets/characters/the-other-one/the-monster.png"),
         imagesUrl: [
             require("../assets/characters/the-other-one/the-monster.png"),
@@ -76,7 +76,7 @@ export const PRODUCTS: Product[] = [
     {
         id: 6,
         title: "Nowhere Safe",
-        slug: "nowhere-safe",
+        slug: "nowhere safe",
         heroImage: require("../assets/characters/the-other-one/nowhere-safe.png"),
         imagesUrl: [
             require("../assets/characters/the-other-one/nowhere-safe.png"),
@@ -136,7 +136,7 @@ export const PRODUCTS: Product[] = [
     {
         id: 10,
         title: "Being Alive",
-        slug: "being-alive",
+        slug: "being alive",
         heroImage: require("../assets/characters/the-other-one/being-alive.png"),
         imagesUrl: [
             require("../assets/characters/the-other-one/being-alive.png"),
@@ -152,7 +152,7 @@ export const PRODUCTS: Product[] = [
     {
         id: 11,
         title: "The Ghost",
-        slug: "the-ghost",
+        slug: "the ghost",
         heroImage: require("../assets/characters/the-other-one/the-ghost.png"),
         imagesUrl: [
             require("../assets/characters/the-other-one/the-ghost.png"),
@@ -168,7 +168,7 @@ export const PRODUCTS: Product[] = [
     {
         id: 12,
         title: "The Crow",
-        slug: "the-crow",
+        slug: "the crow",
         heroImage: require("../assets/characters/the-other-one/the-crow.png"),
         imagesUrl: [require("../assets/characters/the-other-one/the-crow.png")],
         price: 899.99,
@@ -206,14 +206,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Little Mischief",
-            slug: "little-mischief",
+            slug: "little mischief",
         },
         maxQuantity: 5,
     },
     {
         id: 15,
         title: "Boiling Frog",
-        slug: "boiling-frog",
+        slug: "boiling frog",
         heroImage: require("../assets/characters/little-mischief/boiling-frog.png"),
         imagesUrl: [
             require("../assets/characters/little-mischief/boiling-frog.png"),
@@ -222,7 +222,7 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Little Mischief",
-            slug: "little-mischief",
+            slug: "little mischief",
         },
         maxQuantity: 5,
     },
@@ -238,7 +238,7 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Little Mischief",
-            slug: "little-mischief",
+            slug: "little mischief",
         },
         maxQuantity: 5,
     },
@@ -252,14 +252,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Little Mischief",
-            slug: "little-mischief",
+            slug: "little mischief",
         },
         maxQuantity: 5,
     },
     {
         id: 18,
         title: "Loose Fish",
-        slug: "loose-fish",
+        slug: "loose fish",
         heroImage: require("../assets/characters/little-mischief/loose-fish.png"),
         imagesUrl: [
             require("../assets/characters/little-mischief/loose-fish.png"),
@@ -268,7 +268,7 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Little Mischief",
-            slug: "little-mischief",
+            slug: "little mischief",
         },
         maxQuantity: 5,
     },
@@ -284,7 +284,7 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Little Mischief",
-            slug: "little-mischief",
+            slug: "little mischief",
         },
         maxQuantity: 5,
     },
@@ -300,7 +300,7 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Little Mischief",
-            slug: "little-mischief",
+            slug: "little mischief",
         },
         maxQuantity: 5,
     },
@@ -316,7 +316,7 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Little Mischief",
-            slug: "little-mischief",
+            slug: "little mischief",
         },
         maxQuantity: 5,
     },
@@ -332,7 +332,7 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Little Mischief",
-            slug: "little-mischief",
+            slug: "little mischief",
         },
         maxQuantity: 5,
     },
@@ -348,7 +348,7 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Little Mischief",
-            slug: "little-mischief",
+            slug: "little mischief",
         },
         maxQuantity: 5,
     },
@@ -362,14 +362,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Little Mischief",
-            slug: "little-mischief",
+            slug: "little mischief",
         },
         maxQuantity: 5,
     },
     {
         id: 25,
         title: "The Aviator",
-        slug: "the-aviator",
+        slug: "the aviator",
         heroImage: require("../assets/characters/little-mischief/the-aviator.png"),
         imagesUrl: [
             require("../assets/characters/little-mischief/the-aviator.png"),
@@ -378,14 +378,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Little Mischief",
-            slug: "little-mischief",
+            slug: "little mischief",
         },
         maxQuantity: 5,
     },
     {
         id: 26,
         title: "Unknown Journey",
-        slug: "unknown-journey",
+        slug: "unknown journey",
         heroImage: require("../assets/characters/little-mischief/unknown-journey.png"),
         imagesUrl: [
             require("../assets/characters/little-mischief/unknown-journey.png"),
@@ -394,7 +394,7 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Little Mischief",
-            slug: "little-mischief",
+            slug: "little mischief",
         },
         maxQuantity: 5,
     },
@@ -411,14 +411,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "City of Mercy",
-            slug: "city-of-mercy",
+            slug: "city of mercy",
         },
         maxQuantity: 5,
     },
     {
         id: 28,
         title: "Comfortably Numb",
-        slug: "comfortably-numb",
+        slug: "comfortably numb",
         heroImage: require("../assets/characters/city-of-mercy/comfortably-numb.png"),
         imagesUrl: [
             require("../assets/characters/city-of-mercy/comfortably-numb.png"),
@@ -427,7 +427,7 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "City of Mercy",
-            slug: "city-of-mercy",
+            slug: "city of mercy",
         },
         maxQuantity: 5,
     },
@@ -441,14 +441,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "City of Mercy",
-            slug: "city-of-mercy",
+            slug: "city of mercy",
         },
         maxQuantity: 5,
     },
     {
         id: 30,
         title: "Fallen Angel",
-        slug: "fallen-angel",
+        slug: "fallen angel",
         heroImage: require("../assets/characters/city-of-mercy/fallen-angel.png"),
         imagesUrl: [
             require("../assets/characters/city-of-mercy/fallen-angel.png"),
@@ -457,7 +457,7 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "City of Mercy",
-            slug: "city-of-mercy",
+            slug: "city of mercy",
         },
         maxQuantity: 5,
     },
@@ -471,7 +471,7 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "City of Mercy",
-            slug: "city-of-mercy",
+            slug: "city of mercy",
         },
         maxQuantity: 5,
     },
@@ -485,14 +485,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "City of Mercy",
-            slug: "city-of-mercy",
+            slug: "city of mercy",
         },
         maxQuantity: 5,
     },
     {
         id: 33,
         title: "The Other",
-        slug: "the-other",
+        slug: "the other",
         heroImage: require("../assets/characters/city-of-mercy/the-other.png"),
         imagesUrl: [
             require("../assets/characters/city-of-mercy/the-other.png"),
@@ -501,7 +501,7 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "City of Mercy",
-            slug: "city-of-mercy",
+            slug: "city of mercy",
         },
         maxQuantity: 5,
     },
@@ -517,7 +517,7 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "City of Mercy",
-            slug: "city-of-mercy",
+            slug: "city of mercy",
         },
         maxQuantity: 5,
     },
@@ -778,7 +778,7 @@ export const PRODUCTS: Product[] = [
     {
         id: 53,
         title: "Paradise Lost",
-        slug: "paradise-lost",
+        slug: "paradise lost",
         heroImage: require("../assets/characters/reshape/paradise-lost.png"),
         imagesUrl: [require("../assets/characters/reshape/paradise-lost.png")],
         price: 899.99,
@@ -947,7 +947,7 @@ export const PRODUCTS: Product[] = [
     {
         id: 65,
         title: "Mantel Clock",
-        slug: "mantel-clock",
+        slug: "mantel clock",
         heroImage: require("../assets/characters/shelter/mantel-clock.png"),
         imagesUrl: [require("../assets/characters/shelter/mantel-clock.png")],
         price: 899.99,
@@ -975,7 +975,7 @@ export const PRODUCTS: Product[] = [
     {
         id: 67,
         title: "Sunny Doll",
-        slug: "sunny-doll",
+        slug: "sunny doll",
         heroImage: require("../assets/characters/shelter/sunny-doll.png"),
         imagesUrl: [require("../assets/characters/shelter/sunny-doll.png")],
         price: 899.99,
@@ -989,7 +989,7 @@ export const PRODUCTS: Product[] = [
     {
         id: 68,
         title: "Traffic Cone",
-        slug: "traffic-cone",
+        slug: "traffic cone",
         heroImage: require("../assets/characters/shelter/traffic-cone.png"),
         imagesUrl: [require("../assets/characters/shelter/traffic-cone.png")],
         price: 899.99,
@@ -1017,7 +1017,7 @@ export const PRODUCTS: Product[] = [
     {
         id: 70,
         title: "Stuffed Bear",
-        slug: "stuffed-bear",
+        slug: "stuffed bear",
         heroImage: require("../assets/characters/shelter/stuffed-bear.png"),
         imagesUrl: [require("../assets/characters/shelter/stuffed-bear.png")],
         price: 899.99,
@@ -1032,7 +1032,7 @@ export const PRODUCTS: Product[] = [
     {
         id: 71,
         title: "The Businessman",
-        slug: "the-businessman",
+        slug: "the businessman",
         heroImage: require("../assets/characters/le-petit-prince/the-businessman.png"),
         imagesUrl: [
             require("../assets/characters/le-petit-prince/the-businessman.png"),
@@ -1048,7 +1048,7 @@ export const PRODUCTS: Product[] = [
     {
         id: 72,
         title: "The Conceited Man",
-        slug: "the-conceited-man",
+        slug: "the conceited-man",
         heroImage: require("../assets/characters/le-petit-prince/the-conceited-man.png"),
         imagesUrl: [
             require("../assets/characters/le-petit-prince/the-conceited-man.png"),
@@ -1057,14 +1057,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Le Petit Prince",
-            slug: "le-petit-prince",
+            slug: "le petit prince",
         },
         maxQuantity: 5,
     },
     {
         id: 73,
         title: "The Fox",
-        slug: "the-fox",
+        slug: "the fox",
         heroImage: require("../assets/characters/le-petit-prince/the-fox.png"),
         imagesUrl: [
             require("../assets/characters/le-petit-prince/the-fox.png"),
@@ -1073,14 +1073,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Le Petit Prince",
-            slug: "le-petit-prince",
+            slug: "le petit prince",
         },
         maxQuantity: 5,
     },
     {
         id: 74,
         title: "The Geographer",
-        slug: "the-geographer",
+        slug: "the geographer",
         heroImage: require("../assets/characters/le-petit-prince/the-geographer.png"),
         imagesUrl: [
             require("../assets/characters/le-petit-prince/the-geographer.png"),
@@ -1089,14 +1089,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Le Petit Prince",
-            slug: "le-petit-prince",
+            slug: "le petit prince",
         },
         maxQuantity: 5,
     },
     {
         id: 75,
         title: "The King",
-        slug: "the-king",
+        slug: "the king",
         heroImage: require("../assets/characters/le-petit-prince/the-king.png"),
         imagesUrl: [
             require("../assets/characters/le-petit-prince/the-king.png"),
@@ -1105,14 +1105,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Le Petit Prince",
-            slug: "le-petit-prince",
+            slug: "le petit prince",
         },
         maxQuantity: 5,
     },
     {
         id: 76,
         title: "The Lamplighter",
-        slug: "the-lamplighter",
+        slug: "the lamplighter",
         heroImage: require("../assets/characters/le-petit-prince/the-lamplighter.png"),
         imagesUrl: [
             require("../assets/characters/le-petit-prince/the-lamplighter.png"),
@@ -1121,14 +1121,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Le Petit Prince",
-            slug: "le-petit-prince",
+            slug: "le petit prince",
         },
         maxQuantity: 5,
     },
     {
         id: 77,
         title: "The Little Prince",
-        slug: "the-little-prince",
+        slug: "the little prince",
         heroImage: require("../assets/characters/le-petit-prince/the-little-prince.png"),
         imagesUrl: [
             require("../assets/characters/le-petit-prince/the-little-prince.png"),
@@ -1137,14 +1137,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Le Petit Prince",
-            slug: "le-petit-prince",
+            slug: "le petit prince",
         },
         maxQuantity: 5,
     },
     {
         id: 78,
         title: "The Merchant",
-        slug: "the-merchant",
+        slug: "the merchant",
         heroImage: require("../assets/characters/le-petit-prince/the-merchant.png"),
         imagesUrl: [
             require("../assets/characters/le-petit-prince/the-merchant.png"),
@@ -1153,14 +1153,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Le Petit Prince",
-            slug: "le-petit-prince",
+            slug: "le petit prince",
         },
         maxQuantity: 5,
     },
     {
         id: 79,
         title: "The Pilot",
-        slug: "the-pilot",
+        slug: "the pilot",
         heroImage: require("../assets/characters/le-petit-prince/the-pilot.png"),
         imagesUrl: [
             require("../assets/characters/le-petit-prince/the-pilot.png"),
@@ -1169,14 +1169,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Le Petit Prince",
-            slug: "le-petit-prince",
+            slug: "le petit prince",
         },
         maxQuantity: 5,
     },
     {
         id: 80,
         title: "The Rose",
-        slug: "the-rose",
+        slug: "the rose",
         heroImage: require("../assets/characters/le-petit-prince/the-rose.png"),
         imagesUrl: [
             require("../assets/characters/le-petit-prince/the-rose.png"),
@@ -1185,14 +1185,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Le Petit Prince",
-            slug: "le-petit-prince",
+            slug: "le petit prince",
         },
         maxQuantity: 5,
     },
     {
         id: 81,
         title: "The Snake",
-        slug: "the-snake",
+        slug: "the snake",
         heroImage: require("../assets/characters/le-petit-prince/the-snake.png"),
         imagesUrl: [
             require("../assets/characters/le-petit-prince/the-snake.png"),
@@ -1201,14 +1201,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Le Petit Prince",
-            slug: "le-petit-prince",
+            slug: "le petit prince",
         },
         maxQuantity: 5,
     },
     {
         id: 82,
         title: "The Switchman",
-        slug: "the-switchman",
+        slug: "the switchman",
         heroImage: require("../assets/characters/le-petit-prince/the-switchman.png"),
         imagesUrl: [
             require("../assets/characters/le-petit-prince/the-switchman.png"),
@@ -1217,14 +1217,14 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Le Petit Prince",
-            slug: "le-petit-prince",
+            slug: "le petit prince",
         },
         maxQuantity: 5,
     },
     {
         id: 83,
         title: "The Tippler",
-        slug: "the-tippler",
+        slug: "the tippler",
         heroImage: require("../assets/characters/le-petit-prince/the-tippler.png"),
         imagesUrl: [
             require("../assets/characters/le-petit-prince/the-tippler.png"),
@@ -1233,13 +1233,13 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Le Petit Prince",
-            slug: "le-petit-prince",
+            slug: "le petit prince",
         },
         maxQuantity: 5,
     },
     {
         id: 84,
-        title: "Special",
+        title: "Special Prince",
         slug: "special",
         heroImage: require("../assets/characters/le-petit-prince/special.png"),
         imagesUrl: [
@@ -1249,7 +1249,7 @@ export const PRODUCTS: Product[] = [
         category: {
             imageUrl: require("../assets/characters/box_img.webp"),
             name: "Le Petit Prince",
-            slug: "le-petit-prince",
+            slug: "le petit prince",
         },
         maxQuantity: 5,
     },

@@ -15,7 +15,6 @@ export default function ProductLayout() {
                     headerLeft: () => (
                         <TouchableOpacity
                             onPress={() => {
-                                console.log("Software back button pressed");
                                 navigation.goBack(); // Use navigation.goBack() here
                             }}
                         >
