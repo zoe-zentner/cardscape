@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
     FlatList,
     Image,
-    Pressable,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -17,13 +16,26 @@ const BuyItemScreen = () => {
         null | (typeof PRODUCTS)[0]
     >(null);
 
-    // Function to handle category selection
+    const categoryListRef = useRef<FlatList>(null);
+
+    // Triple the categories for seamless scrolling
+    const extendedCategories = [...CATEGORIES, ...CATEGORIES, ...CATEGORIES];
+
+    useEffect(() => {
+        if (categoryListRef.current) {
+            // Start at the middle set of categories
+            categoryListRef.current.scrollToIndex({
+                index: CATEGORIES.length,
+                animated: false,
+            });
+        }
+    }, []);
+
     const handleCategorySelect = (category: (typeof CATEGORIES)[0]) => {
         setSelectedCategory(category);
         setSelectedItem(null); // Clear the selected item when switching categories
     };
 
-    // Function to handle "Buy" button click
     const handleBuy = () => {
         const itemsInCategory = PRODUCTS.filter(
             (product) => product.category.slug === selectedCategory.slug
@@ -37,30 +49,45 @@ const BuyItemScreen = () => {
         }
     };
 
-    // Viewability config for the FlatList
-    const viewabilityConfig = {
-        itemVisiblePercentThreshold: 50, // Consider an item viewable if 50% of it is visible
-    };
+    const onScrollEnd = (event: any) => {
+        const { contentOffset, layoutMeasurement, contentSize } =
+            event.nativeEvent;
+        const position = contentOffset.x;
+        const totalWidth = contentSize.width;
+        const itemWidth = 120; // Width of each item (including margin)
 
-    // Callback to handle the viewable items change
-    const onViewableItemsChanged = ({ viewableItems }: any) => {
-        if (viewableItems.length > 0) {
-            // Get the category slug of the center item
-            const centerItem = viewableItems[0];
-            const category = CATEGORIES.find(
-                (cat) => cat.slug === centerItem.item.slug
-            );
-            if (category) {
-                setSelectedCategory(category);
-            }
+        const middleOffset = CATEGORIES.length * itemWidth;
+
+        if (position <= itemWidth) {
+            // If scrolled too far to the left, reset to the middle
+            categoryListRef.current?.scrollToOffset({
+                offset: position + middleOffset,
+                animated: false,
+            });
+        } else if (
+            position + layoutMeasurement.width >=
+            totalWidth - itemWidth
+        ) {
+            // If scrolled too far to the right, reset to the middle
+            categoryListRef.current?.scrollToOffset({
+                offset: position - middleOffset,
+                animated: false,
+            });
         }
     };
+
+    const getItemLayout = (_: any, index: number) => ({
+        length: 120, // Width of each item (including margin)
+        offset: 120 * index,
+        index,
+    });
 
     return (
         <View style={styles.container}>
             {/* Category Scroller */}
             <FlatList
-                data={CATEGORIES}
+                ref={categoryListRef}
+                data={extendedCategories}
                 horizontal
                 renderItem={({ item }) => (
                     <TouchableOpacity
@@ -78,11 +105,13 @@ const BuyItemScreen = () => {
                         <Text style={styles.categoryText}>{item.name}</Text>
                     </TouchableOpacity>
                 )}
-                keyExtractor={(item) => item.slug}
+                keyExtractor={(item, index) => `${item.slug}-${index}`}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.categoryList}
-                viewabilityConfig={viewabilityConfig}
-                onViewableItemsChanged={onViewableItemsChanged}
+                onScrollEndDrag={onScrollEnd}
+                onMomentumScrollEnd={onScrollEnd}
+                getItemLayout={getItemLayout}
+                initialScrollIndex={CATEGORIES.length} // Start at the middle
             />
 
             {/* Selected Category Image */}
@@ -123,7 +152,7 @@ const styles = StyleSheet.create({
     categoryList: {
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingHorizontal: 10, // Add some padding if needed
+        paddingHorizontal: 10,
     },
     categoryButton: {
         alignItems: "center",
@@ -153,7 +182,7 @@ const styles = StyleSheet.create({
     selectedCategoryImage: {
         width: 150,
         height: 150,
-        borderRadius: 75,
+        borderRadius: 5,
     },
     buyButton: {
         backgroundColor: "#1BC464",
