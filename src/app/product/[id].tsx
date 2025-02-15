@@ -9,21 +9,36 @@ const ProductDetails = () => {
     const [relatedProducts, setRelatedProducts] = useState<any[]>([]); // Store related products
     const [loading, setLoading] = useState<boolean>(true); // Loading state
 
-    // Fetch the product and related products
+    // Function to generate the image URL based on the server configuration and ownership
+    const getImageUrl = (imageName: string, owned: number) => {
+        const baseUrl = "https://cardscape.uk:2033/"; // Base URL for the server
+        const folder = owned === 1 ? "visible" : "hidden"; // Folder path depending on ownership
+        return `${baseUrl}${folder}/${imageName}.png`; // Construct the full URL
+    };
+
     useEffect(() => {
         const fetchProductDetails = async () => {
             const token = "CuD8bDWCJxSsFtx"; // Replace with the actual token
             try {
                 // Fetch products from API
                 const productsData = await getProducts(token);
-                const foundProduct = productsData.find((product: any) => product.id === id); // Use id here
+
+                console.log("Products Data:", productsData); // Log the data to check its structure
+                console.log("Requested ID:", id); // Log the ID from URL
+
+                // Convert both to strings for comparison (if the product.id is a string)
+                const foundProduct = productsData.find(
+                    (product: any) => String(product.id) === id // Convert both to string for comparison
+                );
+
+                console.log("Found Product:", foundProduct); // Log the found product
 
                 if (foundProduct) {
                     setProduct(foundProduct);
 
                     // Find related products (products from the same category)
                     const related = productsData.filter(
-                        (p: any) => p.categoryId === foundProduct.categoryId && p.id !== foundProduct.id // Use id here
+                        (p: any) => p.categoryId === foundProduct.categoryId && String(p.id) !== id // Ensure comparison works
                     );
                     setRelatedProducts(related);
                 }
@@ -37,43 +52,49 @@ const ProductDetails = () => {
         fetchProductDetails();
     }, [id]);
 
-    // If the product is not found, redirect to 404 page
-    if (!product) return <Redirect href="/404" />;
+    // Log to check the state of product before redirecting
+    console.log("Product before render:", product);
 
-    // If still loading, show a loading indicator
+    // If the product is still loading, show a loading spinner
     if (loading) {
         return <ActivityIndicator style={styles.loader} size="large" color="#0000ff" />;
     }
 
+    // If the product is not found, redirect to 404 page
+    if (!product) {
+        console.log("Redirecting to 404 page..."); // Log to ensure we're redirecting as expected
+        return <Redirect href="/404" />;
+    }
+
     return (
         <View style={styles.container}>
-            {/* Product Banner */}
-            <Stack.Screen options={{ title: product.title }} />
-            <Image source={{ uri: product.heroImage }} style={styles.image} />
-            <Text style={styles.title}>{product.title}</Text>
-            <Text style={styles.price}>${product.price.toFixed(2)}</Text>
-
-            {/* Related Products Section */}
-            <Text style={styles.relatedTitle}>More from this category</Text>
-
-            {/* Horizontal Scroll View for Related Products */}
-            <FlatList
-                data={relatedProducts}
-                renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.relatedItem}>
-                        <Image
-                            source={{ uri: item.heroImage }}
-                            style={styles.relatedImage}
-                        />
-                    </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item.id.toString()}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.relatedProductsContainer}
-            />
+            {product ? (
+                <>
+                    <Stack.Screen options={{ title: product.name ? String(product.name) : "Product" }} />
+                    <Image source={{ uri: getImageUrl(product.image, product.owner) }} style={styles.image} />
+                    <Text style={styles.title}>{product.name ? String(product.name) : "Product Name"}</Text>
+                    <Text style={styles.rarity}>Rarity: {product.rarity ? String(product.rarity) : "Unknown"}</Text>
+                    <Text style={styles.relatedTitle}>More from this category</Text>
+                    <FlatList
+                        data={relatedProducts}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity style={styles.relatedItem}>
+                                <Image source={{ uri: getImageUrl(item.image, item.owner) }} style={styles.relatedImage} />
+                                <Text>{item.name ? String(item.name) : "Related Product"}</Text>
+                            </TouchableOpacity>
+                        )}
+                        keyExtractor={(item) => String(item.id)}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={styles.relatedProductsContainer}
+                    />
+                </>
+            ) : (
+                <ActivityIndicator size="large" color="#0000ff" />
+            )}
         </View>
     );
+    
 };
 
 export default ProductDetails;
@@ -99,7 +120,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginBottom: 10,
     },
-    price: {
+    rarity: {
         fontSize: 18,
         color: "gray",
         textAlign: "center",
