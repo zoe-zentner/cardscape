@@ -38,7 +38,7 @@ const Home = () => {
     }
 
     // Group products by category after fetching
-    const groupedProducts = groupProductsByCategory(products);
+    const groupedProducts = groupProductsByCategory(products, categories);
 
     // Function to scroll to a specific category
     const handleCategorySelect = (categorySlug: string) => {
