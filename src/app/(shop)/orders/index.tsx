@@ -6,46 +6,83 @@ import {
     Text,
     TouchableOpacity,
     View,
+    ActivityIndicator,
 } from "react-native";
-import { CATEGORIES } from "../../../../assets/categories"; // Array of categories
-import { PRODUCTS } from "../../../../assets/products"; // Array of products
+import { getProducts, getCategories } from "../../../api/api"; // API calls to fetch data
+
+interface Category {
+    id: number;
+    name: string;
+    image: string;
+}
+
+interface Product {
+    id: number;
+    name: string;
+    categoryId: number;
+    image: string;
+    rarity: number;
+    owned: boolean;
+}
 
 const BuyItemScreen = () => {
-    const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
-    const [selectedItem, setSelectedItem] = useState<
-        null | (typeof PRODUCTS)[0]
-    >(null);
+    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+    const [selectedItem, setSelectedItem] = useState<Product | null>(null);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const flatListRef = useRef<FlatList>(null);
 
-    const categoryListRef = useRef<FlatList>(null);
+    // Fetch categories and products from the API
+    useEffect(() => {
+        const fetchData = async () => {
+            const token = "CuD8bDWCJxSsFtx"; // Use the appropriate token here
+            try {
+                const [categoryData, productData] = await Promise.all([
+                    getCategories(token),
+                    getProducts(token),
+                ]);
+                setCategories(categoryData); // Set fetched categories
+                setProducts(productData); // Set fetched products
+                setSelectedCategory(categoryData[0]); // Set the first category as the default
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                setLoading(false); // Set loading to false once the data is fetched
+            }
+        };
 
-    // Triple the categories for seamless scrolling
-    const extendedCategories = [...CATEGORIES, ...CATEGORIES, ...CATEGORIES];
+        fetchData();
+    }, []);
+
+    // Triple the categories array for seamless scrolling
+    const extendedCategories = [...categories, ...categories, ...categories];
 
     useEffect(() => {
-        if (categoryListRef.current) {
-            // Start at the middle set of categories
-            categoryListRef.current.scrollToIndex({
-                index: CATEGORIES.length,
+        if (flatListRef.current && categories.length > 0) {
+            // Start at the middle set of categories after the first render
+            flatListRef.current.scrollToIndex({
+                index: categories.length,
                 animated: false,
             });
         }
-    }, []);
+    }, [categories]);
 
-    const handleCategorySelect = (category: (typeof CATEGORIES)[0]) => {
+    const handleCategorySelect = (category: Category) => {
         setSelectedCategory(category);
-        setSelectedItem(null); // Clear the selected item when switching categories
+        setSelectedItem(null); // Reset the selected item when category is changed
     };
 
     const handleBuy = () => {
-        const itemsInCategory = PRODUCTS.filter(
-            (product) => product.category.slug === selectedCategory.slug
+        const itemsInCategory = products.filter(
+            (product) => product.categoryId === selectedCategory?.id // Match category ID
         );
         if (itemsInCategory.length > 0) {
             const randomItem =
                 itemsInCategory[
                     Math.floor(Math.random() * itemsInCategory.length)
                 ];
-            setSelectedItem(randomItem);
+            setSelectedItem(randomItem); // Select a random item from the category
         }
     };
 
@@ -56,20 +93,19 @@ const BuyItemScreen = () => {
         const totalWidth = contentSize.width;
         const itemWidth = 120; // Width of each item (including margin)
 
-        const middleOffset = CATEGORIES.length * itemWidth;
+        const middleOffset = categories.length * itemWidth;
 
         if (position <= itemWidth) {
             // If scrolled too far to the left, reset to the middle
-            categoryListRef.current?.scrollToOffset({
+            flatListRef.current?.scrollToOffset({
                 offset: position + middleOffset,
                 animated: false,
             });
         } else if (
-            position + layoutMeasurement.width >=
-            totalWidth - itemWidth
+            position + layoutMeasurement.width >= totalWidth - itemWidth
         ) {
             // If scrolled too far to the right, reset to the middle
-            categoryListRef.current?.scrollToOffset({
+            flatListRef.current?.scrollToOffset({
                 offset: position - middleOffset,
                 animated: false,
             });
@@ -82,44 +118,53 @@ const BuyItemScreen = () => {
         index,
     });
 
+    if (loading) {
+        return <ActivityIndicator style={styles.loader} size="large" color="#0000ff" />;
+    }
+
     return (
         <View style={styles.container}>
             {/* Category Scroller */}
             <FlatList
-                ref={categoryListRef}
+                ref={flatListRef}
                 data={extendedCategories}
                 horizontal
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         style={[
                             styles.categoryButton,
-                            item.slug === selectedCategory.slug &&
-                                styles.selectedCategory,
+                            item.id === selectedCategory?.id && styles.selectedCategory,
                         ]}
                         onPress={() => handleCategorySelect(item)}
                     >
                         <Image
-                            source={{ uri: item.imageUrl }}
+                            source={{
+                                uri: `https://cardscape.uk:2033/groups/${item.image}.png`, // Full URL for category image
+                            }}
                             style={styles.categoryImage}
                         />
                         <Text style={styles.categoryText}>{item.name}</Text>
                     </TouchableOpacity>
                 )}
-                keyExtractor={(item, index) => `${item.slug}-${index}`}
+                keyExtractor={(item, index) => `${item.id}-${index}`} // Unique key by combining id and index
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.categoryList}
                 onScrollEndDrag={onScrollEnd}
                 onMomentumScrollEnd={onScrollEnd}
                 getItemLayout={getItemLayout}
-                initialScrollIndex={CATEGORIES.length} // Start at the middle
+                initialScrollIndex={categories.length} // Start at the middle
             />
 
             {/* Selected Category Image */}
             <View style={styles.selectedCategoryContainer}>
-                <Image
-                    source={{ uri: selectedCategory.imageUrl }}
-                    style={styles.selectedCategoryImage}
-                />
+                {selectedCategory && (
+                    <Image
+                        source={{
+                            uri: `https://cardscape.uk:2033/groups/${selectedCategory.image}.png`, // Full URL for selected category image
+                        }}
+                        style={styles.selectedCategoryImage}
+                    />
+                )}
             </View>
 
             {/* Buy Button */}
@@ -130,12 +175,15 @@ const BuyItemScreen = () => {
             {/* Display Selected Item */}
             {selectedItem && (
                 <View style={styles.selectedItemContainer}>
+                    {/* Display product image */}
                     <Image
-                        source={selectedItem.heroImage}
+                        source={{
+                            uri: `https://cardscape.uk:2033/visible/${selectedItem.image}.png`, // Full URL for product image
+                        }}
                         style={styles.selectedItemImage}
                     />
                     <Text style={styles.selectedItemText}>
-                        {selectedItem.title}
+                        {selectedItem.name} {/* Display product name */}
                     </Text>
                 </View>
             )}
@@ -210,6 +258,11 @@ const styles = StyleSheet.create({
     selectedItemText: {
         fontSize: 16,
         fontWeight: "bold",
+    },
+    loader: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
     },
 });
 
