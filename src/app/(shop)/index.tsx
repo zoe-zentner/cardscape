@@ -66,7 +66,7 @@ const Home = () => {
                         <FlatList
                             data={item.data}
                             renderItem={({ item }) => (
-                                <ProductListItem product={item} /> // Pass each product to ProductListItem
+                                <ProductListItem product={item} onImageLoad={() => {}} /> // Pass each product to ProductListItem
                             )}
                             keyExtractor={(product) => product.id.toString()}
                             numColumns={4}
