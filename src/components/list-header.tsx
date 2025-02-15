@@ -10,6 +10,7 @@ type ListHeaderProps = {
 
 export const ListHeader = ({ onCategorySelect, categories }: ListHeaderProps) => {
     const [userData, setUserData] = useState<any>(null); // State to hold user data
+    console.log(userData);
 
     // Fetch user data from your API when the component mounts
     useEffect(() => {
@@ -17,7 +18,7 @@ export const ListHeader = ({ onCategorySelect, categories }: ListHeaderProps) =>
 
         const fetchUserData = async () => {
             try {
-                const response = await fetch(`http://10.133.125.10:2033/user?token=${token}`);
+                const response = await fetch(`https://cardscape.uk:2033/user?token=${token}`);
                 const data = await response.json();
                 setUserData(data); // Set the user data state
             } catch (error) {

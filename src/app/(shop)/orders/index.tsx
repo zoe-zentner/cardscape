@@ -8,7 +8,9 @@ import {
     View,
     ActivityIndicator,
 } from "react-native";
-import { getProducts, getCategories } from "../../../api/api"; // API calls to fetch data
+import { getProducts, getCategories, purchaseProduct } from "../../../api/api"; // API calls to fetch data
+
+// Assuming you have a `purchaseProduct` function in your API file
 
 interface Category {
     id: number;
@@ -56,36 +58,33 @@ const BuyItemScreen = () => {
         fetchData();
     }, []);
 
-    // Triple the categories array for seamless scrolling
-    const extendedCategories = [...categories, ...categories, ...categories];
-
-    useEffect(() => {
-        if (flatListRef.current && categories.length > 0) {
-            // Start at the middle set of categories after the first render
-            flatListRef.current.scrollToIndex({
-                index: categories.length,
-                animated: false,
-            });
+    // Function to call purchase API
+    const handlePurchase = async (categoryId: number) => {
+        const token = "CuD8bDWCJxSsFtx"; // Use the appropriate token here
+        try {
+            // Send the purchase request to the backend
+            const response = await purchaseProduct(token, categoryId);
+            console.log("Purchase response:", response);
+            if (response === "ok") {
+                // If the purchase was successful, pick a random item from the category
+                const itemsInCategory = products.filter(
+                    (product) => product.categoryId === selectedCategory?.id
+                );
+                const randomItem =
+                    itemsInCategory[
+                        Math.floor(Math.random() * itemsInCategory.length)
+                    ];
+                setSelectedItem(randomItem); // Set the selected item
+                setModalVisible(true); // Show the modal when an item is selected
+            }
+        } catch (error) {
+            console.error("Error purchasing item:", error);
         }
-    }, [categories]);
+    };
 
     const handleCategorySelect = (category: Category) => {
         setSelectedCategory(category);
         setSelectedItem(null); // Reset the selected item when category is changed
-    };
-
-    const handleBuy = () => {
-        const itemsInCategory = products.filter(
-            (product) => product.categoryId === selectedCategory?.id // Match category ID
-        );
-        if (itemsInCategory.length > 0) {
-            const randomItem =
-                itemsInCategory[
-                    Math.floor(Math.random() * itemsInCategory.length)
-                ];
-            setSelectedItem(randomItem); // Select a random item from the category
-            setModalVisible(true); // Show the modal when an item is selected
-        }
     };
 
     const onScrollEnd = (event: any) => {
@@ -129,7 +128,7 @@ const BuyItemScreen = () => {
             {/* Category Scroller */}
             <FlatList
                 ref={flatListRef}
-                data={extendedCategories}
+                data={categories}
                 horizontal
                 renderItem={({ item }) => (
                     <TouchableOpacity
@@ -170,7 +169,10 @@ const BuyItemScreen = () => {
             </View>
 
             {/* Buy Button */}
-            <TouchableOpacity style={styles.buyButton} onPress={handleBuy}>
+            <TouchableOpacity
+                style={styles.buyButton}
+                onPress={() => handlePurchase(selectedCategory?.id ?? 0)} // Pass the selected category ID
+            >
                 <Text style={styles.buyButtonText}>Buy</Text>
             </TouchableOpacity>
 
@@ -190,6 +192,8 @@ const BuyItemScreen = () => {
                             }}
                             style={styles.modalImage}
                         />
+                        <Text style={styles.modalItemName}>{selectedItem.name}</Text>
+                        <Text style={styles.modalItemRarity}>Rarity: {selectedItem.rarity}</Text>
                     </View>
                 </View>
             )}
@@ -285,6 +289,15 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 300,
         resizeMode: "contain",
+    },
+    modalItemName: {
+        fontSize: 18,
+        fontWeight: "bold",
+        marginTop: 10,
+    },
+    modalItemRarity: {
+        fontSize: 16,
+        color: "#888",
     },
     loader: {
         flex: 1,

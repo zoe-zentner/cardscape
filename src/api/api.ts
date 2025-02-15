@@ -41,3 +41,17 @@ export const getUser = async (token: string) => {
     throw error; // Rethrow the error for handling in the calling component
   }
 };
+
+// POST request to handle purchases
+export const purchaseProduct = async (token: string, categoryId: number) => {
+  try {
+      const response = await axios.post(`${BASE_URL}/purchase`, 
+          { categoryId },
+          { params: { token } }
+      );
+      return response.data; // Should return 'ok' if successful
+  } catch (error) {
+      console.error("Error making purchase:", error);
+      throw error; // Rethrow error if purchase fails
+  }
+};
