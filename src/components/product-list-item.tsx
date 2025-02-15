@@ -28,9 +28,6 @@ export const ProductListItem = ({ product }: { product: any }) => {
                         {product.name} {/* Product name */}
                     </Text>
                     <Text style={styles.itemRarity}>
-                        {product.owner ? "Owned" : "Not Owned"} {/* Ownership status */}
-                    </Text>
-                    <Text style={styles.itemRarity}>
                         Rarity: {product.rarity} {/* Rarity info */}
                     </Text>
                 </View>

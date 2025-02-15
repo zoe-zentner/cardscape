@@ -1,30 +1,35 @@
 import React, { useEffect, useState, useRef } from "react";
 import { FlatList, StyleSheet, Text, View, ActivityIndicator } from "react-native";
-import { getProducts } from "../../api/api"; // Fetch products from API
+import { getCategories, getProducts } from "../../api/api"; // Fetch products and categories from API
 import { ListHeader } from "../../components/list-header";
 import { ProductListItem } from "../../components/product-list-item"; // Product rendering component
 import { groupProductsByCategory } from "../../utils/productUtils"; // Group products by category
 
 const Home = () => {
     const [products, setProducts] = useState<any[]>([]); // State to store fetched products
+    const [categories, setCategories] = useState<any[]>([]); // State to store fetched categories
     const [loading, setLoading] = useState<boolean>(true); // Loading state
     const flatListRef = useRef<FlatList>(null);
 
-    // Fetch products from the database (API)
+    // Fetch products and categories from the database (API)
     useEffect(() => {
-        const fetchProducts = async () => {
+        const fetchData = async () => {
             const token = "CuD8bDWCJxSsFtx"; // Replace with the actual token
             try {
-                const data = await getProducts(token); // Fetch data from API
-                setProducts(data); // Store the fetched products
+                const [productData, categoryData] = await Promise.all([
+                    getProducts(token), // Fetch data from API
+                    getCategories(token), // Fetch categories from API
+                ]);
+                setProducts(productData); // Store the fetched products
+                setCategories(categoryData); // Store the fetched categories
             } catch (error) {
-                console.error("Error fetching products:", error);
+                console.error("Error fetching data:", error);
             } finally {
                 setLoading(false); // Once data is fetched, set loading to false
             }
         };
 
-        fetchProducts();
+        fetchData();
     }, []);
 
     // If still loading, show loading indicator
@@ -55,7 +60,9 @@ const Home = () => {
                 data={groupedProducts}
                 renderItem={({ item }) => (
                     <View style={styles.categoryContainer}>
-                        <Text style={styles.categoryTitle}>{item.title}</Text>
+                        <Text style={styles.categoryTitle}>
+                            {categories.find((cat) => cat.id === item.title)?.name || item.title} {/* Display category name */}
+                        </Text>
                         <FlatList
                             data={item.data}
                             renderItem={({ item }) => (
@@ -70,7 +77,10 @@ const Home = () => {
                 )}
                 keyExtractor={(item) => item.title}
                 ListHeaderComponent={
-                    <ListHeader onCategorySelect={handleCategorySelect} />
+                    <ListHeader
+                        categories={categories} // Pass categories to ListHeader
+                        onCategorySelect={handleCategorySelect}
+                    />
                 }
                 contentContainerStyle={styles.flatListContent}
                 style={{ paddingHorizontal: 10, paddingVertical: 5 }}

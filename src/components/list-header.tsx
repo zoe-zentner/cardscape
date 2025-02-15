@@ -1,48 +1,14 @@
-import { Link } from "expo-router";
-import React, { useEffect, useState } from "react";
-import {
-    ActivityIndicator,
-    FlatList,
-    Image,
-    Pressable,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import React from "react";
+import { FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-// import { CATEGORIES } from "../../assets/categories";
-import { getCategories } from "../api/api"; // Import the API utility
+import { Link } from "expo-router";
 
 type ListHeaderProps = {
     onCategorySelect: (categorySlug: string) => void;
+    categories: any[]; // Accept categories as a prop
 };
 
-export const ListHeader = ({ onCategorySelect }: ListHeaderProps) => {
-    const [categories, setCategories] = useState<any[]>([]); // State to store products
-    const [loading, setLoading] = useState<boolean>(true); // Loading state
-
-    useEffect(() => {
-    const fetchCategories = async () => {
-        const token = "CuD8bDWCJxSsFtx"; // Replace with the actual token
-        try {
-        const data = await getCategories(token); // Fetch cats from the server
-        setCategories(data); // Store the fetched cats in the state
-        } catch (error) {
-        console.error("Error fetching category:", error); // Handle any errors
-        } finally {
-        setLoading(false); // Set loading to false when done
-        }
-    };
-
-    fetchCategories();
-    }, []);
-
-    // If still loading, show a loading spinner
-    if (loading) {
-        return <ActivityIndicator style={styles.loader} size="large" color="#0000ff" />;
-    }
-
+export const ListHeader = ({ onCategorySelect, categories }: ListHeaderProps) => {
     return (
         <View style={[styles.headerContainer]}>
             <View style={styles.headerTop}>
