@@ -29,3 +29,15 @@ export const getCategories = async (token: string) => {
     throw error; // Rethrow the error for handling in the calling component
   }
 };
+
+export const getUser = async (token: string) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/user`, {
+      params: { token }, // Pass token as a query parameter
+    });
+    return response.data; // Return the data from the server
+  } catch (error) {
+    console.error('Error in authenticate:', error); // Log error if the API call fails
+    throw error; // Rethrow the error for handling in the calling component
+  }
+};

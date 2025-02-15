@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link } from "expo-router";
@@ -9,6 +9,30 @@ type ListHeaderProps = {
 };
 
 export const ListHeader = ({ onCategorySelect, categories }: ListHeaderProps) => {
+    const [userData, setUserData] = useState<any>(null); // State to hold user data
+
+    // Fetch user data from your API when the component mounts
+    useEffect(() => {
+        const token = "CuD8bDWCJxSsFtx"; // Replace with actual token logic
+
+        const fetchUserData = async () => {
+            try {
+                const response = await fetch(`http://10.133.125.10:2033/user?token=${token}`);
+                const data = await response.json();
+                setUserData(data); // Set the user data state
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
+    // Early return with a loading message if userData is not yet available
+    if (!userData) {
+        return <Text>Loading...</Text>; // Display loading message while user data is being fetched
+    }
+
     return (
         <View style={[styles.headerContainer]}>
             <View style={styles.headerTop}>
@@ -18,10 +42,17 @@ export const ListHeader = ({ onCategorySelect, categories }: ListHeaderProps) =>
                             source={{ uri: "https://via.placeholder.com/40" }}
                             style={styles.avatarImage}
                         />
-                        <Text style={styles.avatarText}>Hello Zoe!</Text>
+                        {/* Safely render username, fallback to "Guest" if undefined */}
+                        <Text style={styles.avatarText}>
+                            {userData.username || "Guest"}!
+                        </Text>
                     </View>
                 </View>
                 <View style={styles.headerRight}>
+                    {/* Safely render coins, fallback to 0 if undefined */}
+                    <Text style={styles.coinsText}>
+                        <FontAwesome name="money" size={20} color="#006400" /> {userData.coins !== undefined ? userData.coins : 0}
+                    </Text>
                     <Link style={styles.cartContainer} href="/cart" asChild>
                         <Pressable>
                             {({ pressed }) => (
@@ -37,17 +68,12 @@ export const ListHeader = ({ onCategorySelect, categories }: ListHeaderProps) =>
                                     />
 
                                     <View style={styles.badgeContainer}>
-                                        <Text style={styles.badgeText}>
-                                            {1}
-                                        </Text>
+                                        <Text style={styles.badgeText}>{1}</Text>
                                     </View>
                                 </View>
                             )}
                         </Pressable>
                     </Link>
-                    <TouchableOpacity style={styles.signOutButton}>
-                        <FontAwesome name="sign-out" size={25} color="red" />
-                    </TouchableOpacity>
                 </View>
             </View>
             <View style={styles.heroContainer}>
@@ -113,6 +139,11 @@ const styles = StyleSheet.create({
     },
     avatarText: {
         fontSize: 16,
+    },
+    coinsText: {
+        fontSize: 16,
+        fontWeight: "bold",
+        marginRight: 20,
     },
     cartContainer: {
         padding: 10,
