@@ -31,6 +31,7 @@ const BuyItemScreen = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [isModalVisible, setModalVisible] = useState<boolean>(false); // State to control modal visibility
     const flatListRef = useRef<FlatList>(null);
 
     // Fetch categories and products from the API
@@ -83,6 +84,7 @@ const BuyItemScreen = () => {
                     Math.floor(Math.random() * itemsInCategory.length)
                 ];
             setSelectedItem(randomItem); // Select a random item from the category
+            setModalVisible(true); // Show the modal when an item is selected
         }
     };
 
@@ -173,18 +175,22 @@ const BuyItemScreen = () => {
             </TouchableOpacity>
 
             {/* Display Selected Item */}
-            {selectedItem && (
-                <View style={styles.selectedItemContainer}>
-                    {/* Display product image */}
-                    <Image
-                        source={{
-                            uri: `https://cardscape.uk:2033/visible/${selectedItem.image}.png`, // Full URL for product image
-                        }}
-                        style={styles.selectedItemImage}
-                    />
-                    <Text style={styles.selectedItemText}>
-                        {selectedItem.name} {/* Display product name */}
-                    </Text>
+            {selectedItem && isModalVisible && (
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <TouchableOpacity
+                            style={styles.closeButton}
+                            onPress={() => setModalVisible(false)} // Close the modal when clicking X
+                        >
+                            <Text style={styles.closeButtonText}>X</Text>
+                        </TouchableOpacity>
+                        <Image
+                            source={{
+                                uri: `https://cardscape.uk:2033/visible/${selectedItem.image}.png`, // Full URL for product image
+                            }}
+                            style={styles.modalImage}
+                        />
+                    </View>
                 </View>
             )}
         </View>
@@ -245,19 +251,40 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
     },
-    selectedItemContainer: {
+    modalContainer: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.7)", // Semi-transparent overlay
+        justifyContent: "center",
         alignItems: "center",
-        marginTop: 20,
     },
-    selectedItemImage: {
-        width: 100,
-        height: 100,
+    modalContent: {
+        backgroundColor: "white",
+        padding: 40,
         borderRadius: 10,
-        marginBottom: 10,
+        alignItems: "center",
+        width: "80%", // Controls modal width
     },
-    selectedItemText: {
-        fontSize: 16,
+    closeButton: {
+        position: "absolute",
+        top: 10,
+        right: 10,
+        backgroundColor: "#FF0000",
+        padding: 10,
+        borderRadius: 15,
+    },
+    closeButtonText: {
+        color: "white",
+        fontSize: 18,
         fontWeight: "bold",
+    },
+    modalImage: {
+        width: "100%",
+        height: 300,
+        resizeMode: "contain",
     },
     loader: {
         flex: 1,
