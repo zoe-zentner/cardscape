@@ -80,7 +80,6 @@ const ProductDetails = () => {
                         renderItem={({ item }) => (
                             <TouchableOpacity style={styles.relatedItem}>
                                 <Image source={{ uri: getImageUrl(item.image, item.owner) }} style={styles.relatedImage} />
-                                <Text>{item.name ? String(item.name) : "Related Product"}</Text>
                             </TouchableOpacity>
                         )}
                         keyExtractor={(item) => String(item.id)}
