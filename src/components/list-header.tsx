@@ -1,5 +1,7 @@
 import { Link } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
+    ActivityIndicator,
     FlatList,
     Image,
     Pressable,
@@ -9,13 +11,38 @@ import {
     View,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { CATEGORIES } from "../../assets/categories";
+// import { CATEGORIES } from "../../assets/categories";
+import { getCategories } from "../api/api"; // Import the API utility
 
 type ListHeaderProps = {
     onCategorySelect: (categorySlug: string) => void;
 };
 
 export const ListHeader = ({ onCategorySelect }: ListHeaderProps) => {
+    const [categories, setCategories] = useState<any[]>([]); // State to store products
+    const [loading, setLoading] = useState<boolean>(true); // Loading state
+
+    useEffect(() => {
+    const fetchCategories = async () => {
+        const token = "CuD8bDWCJxSsFtx"; // Replace with the actual token
+        try {
+        const data = await getCategories(token); // Fetch cats from the server
+        setCategories(data); // Store the fetched cats in the state
+        } catch (error) {
+        console.error("Error fetching category:", error); // Handle any errors
+        } finally {
+        setLoading(false); // Set loading to false when done
+        }
+    };
+
+    fetchCategories();
+    }, []);
+
+    // If still loading, show a loading spinner
+    if (loading) {
+        return <ActivityIndicator style={styles.loader} size="large" color="#0000ff" />;
+    }
+
     return (
         <View style={[styles.headerContainer]}>
             <View style={styles.headerTop}>
@@ -66,20 +93,22 @@ export const ListHeader = ({ onCategorySelect }: ListHeaderProps) => {
             <View style={styles.categoriesContainer}>
                 <Text style={styles.sectionTitle}>Categories</Text>
                 <FlatList
-                    data={CATEGORIES}
+                    data={categories || []}
                     renderItem={({ item }) => (
                         <Pressable
                             style={styles.category}
-                            onPress={() => onCategorySelect(item.slug)} // Trigger scroll on category click
+                            onPress={() => onCategorySelect(item.name.toLowerCase())} // Trigger scroll on category click
                         >
                             <Image
-                                source={{ uri: item.imageUrl }}
+                                source={{
+                                    uri: `https://cardscape.uk:2033/groups/${item.image}.png`, // Construct the full image URL using the filename
+                                }}
                                 style={styles.categoryImage}
                             />
                             <Text style={styles.categoryText}>{item.name}</Text>
                         </Pressable>
                     )}
-                    keyExtractor={(item) => item.slug}
+                    keyExtractor={(item) => item.id.toString()} // Use id as the unique key
                     horizontal
                     showsHorizontalScrollIndicator={false}
                 />
@@ -165,6 +194,11 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: 20,
         height: 20,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    loader: {
+        flex: 1,
         justifyContent: "center",
         alignItems: "center",
     },

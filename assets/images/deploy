@@ -1,0 +1,5 @@
+#!/bin/bash
+
+scp categories/*.png root@cardscape.uk:images/categories
+scp visible/*.png root@cardscape.uk:images/visible
+scp hidden/*.png root@cardscape.uk:images/hidden

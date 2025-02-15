@@ -1,14 +1,39 @@
-import React, { useRef } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
-import { PRODUCTS } from "../../../assets/products";
-import { ProductListItem } from "../../components/product-list-item";
+import React, { useEffect, useState, useRef } from "react";
+import { FlatList, StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import { getProducts } from "../../api/api"; // Fetch products from API
 import { ListHeader } from "../../components/list-header";
-import { groupProductsByCategory } from "../../utils/productUtils";
+import { ProductListItem } from "../../components/product-list-item"; // Product rendering component
+import { groupProductsByCategory } from "../../utils/productUtils"; // Group products by category
 
 const Home = () => {
-    // Group products by category
-    const groupedProducts = groupProductsByCategory(PRODUCTS);
+    const [products, setProducts] = useState<any[]>([]); // State to store fetched products
+    const [loading, setLoading] = useState<boolean>(true); // Loading state
     const flatListRef = useRef<FlatList>(null);
+
+    // Fetch products from the database (API)
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const token = "CuD8bDWCJxSsFtx"; // Replace with the actual token
+            try {
+                const data = await getProducts(token); // Fetch data from API
+                setProducts(data); // Store the fetched products
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            } finally {
+                setLoading(false); // Once data is fetched, set loading to false
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
+    // If still loading, show loading indicator
+    if (loading) {
+        return <ActivityIndicator style={styles.loader} size="large" color="#0000ff" />;
+    }
+
+    // Group products by category after fetching
+    const groupedProducts = groupProductsByCategory(products);
 
     // Function to scroll to a specific category
     const handleCategorySelect = (categorySlug: string) => {
@@ -34,10 +59,10 @@ const Home = () => {
                         <FlatList
                             data={item.data}
                             renderItem={({ item }) => (
-                                <ProductListItem product={item} />
+                                <ProductListItem product={item} /> // Pass each product to ProductListItem
                             )}
                             keyExtractor={(product) => product.id.toString()}
-                            numColumns={4} // Set number of columns for the products in each category
+                            numColumns={4}
                             columnWrapperStyle={styles.flatListColumn}
                             showsVerticalScrollIndicator={false}
                         />
@@ -74,6 +99,11 @@ const styles = StyleSheet.create({
     flatListColumn: {
         justifyContent: "flex-start",
         gap: 6.5,
+    },
+    loader: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
     },
 });
 

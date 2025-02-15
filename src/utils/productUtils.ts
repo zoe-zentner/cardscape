@@ -1,20 +1,19 @@
-import { Product } from "../../assets/types/product";
+// groupProductsByCategory.ts
+export const groupProductsByCategory = (products: any[]) => {
+    const grouped = products.reduce((acc: Record<string, any[]>, product) => {
+        const categoryName = product.categoryId.toString(); // Use categoryId for grouping
 
-export const groupProductsByCategory = (products: Product[]) => {
-    const grouped = products.reduce(
-        (acc: Record<string, Product[]>, product) => {
-            const categoryName = product.category.name;
-            if (!acc[categoryName]) {
-                acc[categoryName] = [];
-            }
-            acc[categoryName].push(product);
-            return acc;
-        },
-        {}
-    );
+        if (!acc[categoryName]) {
+            acc[categoryName] = [];
+        }
 
-    return Object.keys(grouped).map((category) => ({
-        title: category,
-        data: grouped[category],
+        acc[categoryName].push(product);
+
+        return acc;
+    }, {});
+
+    return Object.keys(grouped).map((categoryId) => ({
+        title: `Category ${categoryId}`, // Use category name if available
+        data: grouped[categoryId],
     }));
 };
