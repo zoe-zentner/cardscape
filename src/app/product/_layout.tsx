@@ -9,7 +9,7 @@ export default function ProductLayout() {
     return (
         <Stack>
             <Stack.Screen
-                name="[slug]"
+                name="[id]"
                 options={{
                     headerShown: true,
                     headerLeft: () => (

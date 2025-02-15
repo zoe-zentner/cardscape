@@ -1,35 +1,55 @@
-import React from "react";
-import {
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    FlatList,
-    TouchableOpacity,
-} from "react-native";
-import { Redirect, Stack, useLocalSearchParams } from "expo-router";
-import { PRODUCTS } from "../../../assets/products";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
+import { useLocalSearchParams, Redirect, Stack } from "expo-router";
+import { getProducts } from "../../api/api"; // Your API fetching function
 
 const ProductDetails = () => {
-    const { slug } = useLocalSearchParams<{ slug: string }>();
+    const { id } = useLocalSearchParams<{ id: string }>(); // Get the product id from URL
+    const [product, setProduct] = useState<any>(null); // Store the individual product
+    const [relatedProducts, setRelatedProducts] = useState<any[]>([]); // Store related products
+    const [loading, setLoading] = useState<boolean>(true); // Loading state
 
-    // Find the product by slug
-    const product = PRODUCTS.find((product) => product.slug === slug);
+    // Fetch the product and related products
+    useEffect(() => {
+        const fetchProductDetails = async () => {
+            const token = "CuD8bDWCJxSsFtx"; // Replace with the actual token
+            try {
+                // Fetch products from API
+                const productsData = await getProducts(token);
+                const foundProduct = productsData.find((product: any) => product.id === id); // Use id here
 
-    // Redirect if product not found
+                if (foundProduct) {
+                    setProduct(foundProduct);
+
+                    // Find related products (products from the same category)
+                    const related = productsData.filter(
+                        (p: any) => p.categoryId === foundProduct.categoryId && p.id !== foundProduct.id // Use id here
+                    );
+                    setRelatedProducts(related);
+                }
+            } catch (error) {
+                console.error("Error fetching product details:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProductDetails();
+    }, [id]);
+
+    // If the product is not found, redirect to 404 page
     if (!product) return <Redirect href="/404" />;
 
-    // Get all products in the same category
-    const relatedProducts = PRODUCTS.filter(
-        (p) =>
-            p.category.slug === product.category.slug && p.slug !== product.slug
-    );
+    // If still loading, show a loading indicator
+    if (loading) {
+        return <ActivityIndicator style={styles.loader} size="large" color="#0000ff" />;
+    }
 
     return (
         <View style={styles.container}>
             {/* Product Banner */}
             <Stack.Screen options={{ title: product.title }} />
-            <Image source={product.heroImage} style={styles.image} />
+            <Image source={{ uri: product.heroImage }} style={styles.image} />
             <Text style={styles.title}>{product.title}</Text>
             <Text style={styles.price}>${product.price.toFixed(2)}</Text>
 
@@ -42,7 +62,7 @@ const ProductDetails = () => {
                 renderItem={({ item }) => (
                     <TouchableOpacity style={styles.relatedItem}>
                         <Image
-                            source={item.heroImage}
+                            source={{ uri: item.heroImage }}
                             style={styles.relatedImage}
                         />
                     </TouchableOpacity>
@@ -101,5 +121,10 @@ const styles = StyleSheet.create({
         width: 120, // Smaller image size for the scroll bar
         height: 120,
         resizeMode: "contain",
+    },
+    loader: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
     },
 });

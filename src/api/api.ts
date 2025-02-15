@@ -4,11 +4,11 @@ const BASE_URL = 'https://cardscape.uk:2033/'; // Replace localhost with your ac
 
 export const getProducts = async (token: string) => {
   try {
-    console.log(`Making API call to: ${BASE_URL}/products?token=${token}`); // Log URL for verification
+    // console.log(`Making API call to: ${BASE_URL}/products?token=${token}`); // Log URL for verification
     const response = await axios.get(`${BASE_URL}/products`, {
       params: { token }, // Pass token as a query parameter
     });
-    console.log('Server response in getProducts:', response.data); // Log the server response
+    // console.log('Server response in getProducts:', response.data); // Log the server response
     return response.data; // Return the data from the server
   } catch (error) {
     console.error('Error in getProducts:', error); // Log error if the API call fails
@@ -18,11 +18,11 @@ export const getProducts = async (token: string) => {
 
 export const getCategories = async (token: string) => {
   try {
-    console.log(`Making API call to: ${BASE_URL}/categories?token=${token}`); // Log URL for verification
+    // console.log(`Making API call to: ${BASE_URL}/categories?token=${token}`); // Log URL for verification
     const response = await axios.get(`${BASE_URL}/categories`, {
       params: { token }, // Pass token as a query parameter
     });
-    console.log('Server response in getCategories:', response.data); // Log the server response
+    // console.log('Server response in getCategories:', response.data); // Log the server response
     return response.data; // Return the data from the server
   } catch (error) {
     console.error('Error in getCategories:', error); // Log error if the API call fails

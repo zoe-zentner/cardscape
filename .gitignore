@@ -34,3 +34,20 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# Ignore all images inside assets/images/ and assets/characters/
+assets/images/*
+assets/images/**/*.png
+assets/images/**/*.jpg
+assets/images/**/*.jpeg
+assets/images/**/*.gif
+assets/images/**/*.svg
+assets/images/**/*.webp
+
+assets/characters/*
+assets/characters/**/*.png
+assets/characters/**/*.jpg
+assets/characters/**/*.jpeg
+assets/characters/**/*.gif
+assets/characters/**/*.svg
+assets/characters/**/*.webp
