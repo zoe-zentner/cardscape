@@ -2,16 +2,24 @@ import React from "react";
 import { StyleSheet, Text, View, Image, Pressable, Dimensions } from "react-native";
 import { Link } from "expo-router";
 
-// Screen width to adjust the item size dynamically
 const screenWidth = Dimensions.get("window").width;
-const itemWidth = (screenWidth - 40) / 4; // Divide by 4 to create 4 items per row
+const itemWidth = (screenWidth - 40) / 4;
 
-export const ProductListItem = ({ product }: { product: any }) => {
+export const ProductListItem = ({ product, onImageLoad }: { product: any; onImageLoad: () => void }) => {
     // Function to generate the image URL based on the server configuration and ownership
     const getImageUrl = (imageName: string, owned: number) => {
-        const baseUrl = "https://cardscape.uk:2033/"; // Base URL for the server
-        const folder = owned === 1 ? "visible" : "hidden"; // Folder path depending on ownership
-        return `${baseUrl}${folder}/${imageName}.png`; // Construct the full URL
+        const baseUrl = "https://cardscape.uk:2033/";
+        const folder = owned === 1 ? "visible" : "hidden";
+        return `${baseUrl}${folder}/${imageName}.png`;
+    };
+
+    // Function to render stars based on the rarity value
+    const renderStars = (rarity: number) => {
+        const stars = [];
+        for (let i = 0; i < rarity; i++) {
+            stars.push("★"); // Add a filled star for each rarity point
+        }
+        return stars.join(" "); // Join all stars with a space
     };
 
     return (
@@ -19,16 +27,17 @@ export const ProductListItem = ({ product }: { product: any }) => {
             <Pressable style={[styles.item, { width: itemWidth }]}>
                 <View style={[styles.itemImageContainer, { width: itemWidth }]}>
                     <Image
-                        source={{ uri: getImageUrl(product.image, product.owner) }} // Get the image URL dynamically
+                        source={{ uri: getImageUrl(product.image, product.owner) }}
                         style={styles.itemImage}
+                        onLoad={onImageLoad}
                     />
                 </View>
                 <View style={styles.itemTextContainer}>
                     <Text style={[styles.itemTitle, { width: itemWidth - 16 }]}>
-                        {product.name} {/* Product name */}
+                        {product.name}
                     </Text>
                     <Text style={styles.itemRarity}>
-                        Rarity: {product.rarity} {/* Rarity info */}
+                        {renderStars(product.rarity)} {/* Render stars based on rarity */}
                     </Text>
                 </View>
             </Pressable>
@@ -44,7 +53,7 @@ const styles = StyleSheet.create({
         overflow: "hidden",
     },
     itemImageContainer: {
-        height: 130, // Fixed height for consistent layout
+        height: 130,
         overflow: "hidden",
         borderRadius: 10,
     },
@@ -52,7 +61,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
         resizeMode: "cover",
-        borderRadius: 10, // Rounded corners for the image
+        borderRadius: 10,
     },
     itemTextContainer: {
         padding: 8,
@@ -63,11 +72,11 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: "black",
         lineHeight: 20,
-        flexWrap: "wrap", // Allows text to wrap
+        flexWrap: "wrap",
     },
     itemRarity: {
-        fontSize: 11,
+        fontSize: 13,
         fontWeight: "bold",
+        color: "#808080",
     },
 });
-
