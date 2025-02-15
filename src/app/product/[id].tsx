@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
-import { useLocalSearchParams, Redirect, Stack } from "expo-router";
+import { useLocalSearchParams, Redirect, Stack,} from "expo-router";
+import { useRouter } from "expo-router";
 import { getProducts } from "../../api/api"; // Your API fetching function
 
 const ProductDetails = () => {
@@ -8,6 +9,7 @@ const ProductDetails = () => {
     const [product, setProduct] = useState<any>(null); // Store the individual product
     const [relatedProducts, setRelatedProducts] = useState<any[]>([]); // Store related products
     const [loading, setLoading] = useState<boolean>(true); // Loading state
+    const router = useRouter(); // Get the router object
 
     // Function to generate the image URL based on the server configuration and ownership
     const getImageUrl = (imageName: string, owned: number) => {
@@ -78,7 +80,10 @@ const ProductDetails = () => {
                     <FlatList
                         data={relatedProducts}
                         renderItem={({ item }) => (
-                            <TouchableOpacity style={styles.relatedItem}>
+                            <TouchableOpacity 
+                            style={styles.relatedItem} 
+                            onPress={() => router.replace(`/product/${item.id}`)} // Update URL
+                            >
                                 <Image source={{ uri: getImageUrl(item.image, item.owner) }} style={styles.relatedImage} />
                             </TouchableOpacity>
                         )}
