@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link } from "expo-router";
+import { UserContext } from "../context/UserContext"; // Import UserContext
 
 type ListHeaderProps = {
     onCategorySelect: (categorySlug: string) => void;
@@ -9,25 +10,8 @@ type ListHeaderProps = {
 };
 
 export const ListHeader = ({ onCategorySelect, categories }: ListHeaderProps) => {
-    const [userData, setUserData] = useState<any>(null); // State to hold user data
+    const { userData } = useContext(UserContext);
     console.log(userData);
-
-    // Fetch user data from your API when the component mounts
-    useEffect(() => {
-        const token = "CuD8bDWCJxSsFtx"; // Replace with actual token logic
-
-        const fetchUserData = async () => {
-            try {
-                const response = await fetch(`https://cardscape.uk:2033/user?token=${token}`);
-                const data = await response.json();
-                setUserData(data); // Set the user data state
-            } catch (error) {
-                console.error("Error fetching user data:", error);
-            }
-        };
-
-        fetchUserData();
-    }, []);
 
     // Early return with a loading message if userData is not yet available
     if (!userData) {

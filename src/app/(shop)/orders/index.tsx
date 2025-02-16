@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import {
     FlatList,
     Image,
@@ -9,6 +9,7 @@ import {
     ActivityIndicator,
 } from "react-native";
 import { getProducts, getCategories, purchaseProduct } from "../../../api/api"; // API calls to fetch data
+import { UserContext } from "../../../context/UserContext"; // Import UserContext
 
 // Assuming you have a `purchaseProduct` function in your API file
 
@@ -35,6 +36,7 @@ const BuyItemScreen = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [isModalVisible, setModalVisible] = useState<boolean>(false); // State to control modal visibility
     const flatListRef = useRef<FlatList>(null);
+    const { userData, setUserData } = useContext(UserContext);
 
     // Fetch categories and products from the API
     useEffect(() => {
@@ -58,24 +60,26 @@ const BuyItemScreen = () => {
         fetchData();
     }, []);
 
-    // Function to call purchase API
+    // Function to call purchase 
     const handlePurchase = async (categoryId: number) => {
-        const token = "CuD8bDWCJxSsFtx"; // Use the appropriate token here
+        const token = "CuD8bDWCJxSsFtx";
         try {
-            // Send the purchase request to the backend
             const response = await purchaseProduct(token, categoryId);
             console.log("Purchase response:", response);
+    
             if (response === "ok") {
-                // If the purchase was successful, pick a random item from the category
+                // Update the global userData state after purchase
+                setUserData((prevUserData: any) => ({
+                    ...prevUserData,
+                    coins: prevUserData.coins - 1, // Decrement locally
+                }));
+    
                 const itemsInCategory = products.filter(
                     (product) => product.categoryId === selectedCategory?.id
                 );
-                const randomItem =
-                    itemsInCategory[
-                        Math.floor(Math.random() * itemsInCategory.length)
-                    ];
-                setSelectedItem(randomItem); // Set the selected item
-                setModalVisible(true); // Show the modal when an item is selected
+                const randomItem = itemsInCategory[Math.floor(Math.random() * itemsInCategory.length)];
+                setSelectedItem(randomItem);
+                setModalVisible(true);
             }
         } catch (error) {
             console.error("Error purchasing item:", error);
