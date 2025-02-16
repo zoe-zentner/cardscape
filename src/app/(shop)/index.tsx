@@ -1,46 +1,47 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FlatList, StyleSheet, Text, View, ActivityIndicator } from "react-native";
-import { getCategories, getProducts } from "../../api/api"; // Fetch products and categories from API
+import { getCategories } from "../../api/api";
 import { ListHeader } from "../../components/list-header";
-import { ProductListItem } from "../../components/product-list-item"; // Product rendering component
-import { groupProductsByCategory } from "../../utils/productUtils"; // Group products by category
+import { ProductListItem } from "../../components/product-list-item";
+import { groupProductsByCategory } from "../../utils/productUtils";
+import { useProductStore } from "../../store/store";
 
 const Home = () => {
-    const [products, setProducts] = useState<any[]>([]); // State to store fetched products
-    const [categories, setCategories] = useState<any[]>([]); // State to store fetched categories
-    const [loading, setLoading] = useState<boolean>(true); // Loading state
+    const { products, fetchProducts } = useProductStore(); // ✅ Call Zustand outside useEffect
+    const [categories, setCategories] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
     const flatListRef = useRef<FlatList>(null);
 
-    // Fetch products and categories from the database (API)
     useEffect(() => {
+        let isMounted = true;
+
         const fetchData = async () => {
-            const token = "CuD8bDWCJxSsFtx"; // Replace with the actual token
+            setLoading(true);
             try {
-                const [productData, categoryData] = await Promise.all([
-                    getProducts(token), // Fetch data from API
-                    getCategories(token), // Fetch categories from API
-                ]);
-                setProducts(productData); // Store the fetched products
-                setCategories(categoryData); // Store the fetched categories
+                await fetchProducts(); // ✅ Call Zustand store function here
+                const token = "CuD8bDWCJxSsFtx";
+                const categoryData = await getCategories(token);
+                if (isMounted) setCategories(categoryData);
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
-                setLoading(false); // Once data is fetched, set loading to false
+                if (isMounted) setLoading(false);
             }
         };
 
         fetchData();
-    }, []);
 
-    // If still loading, show loading indicator
+        return () => {
+            isMounted = false; // ✅ Cleanup function to prevent memory leaks
+        };
+    }, [fetchProducts]); // ✅ Ensure dependencies are correctly handled
+
     if (loading) {
         return <ActivityIndicator style={styles.loader} size="large" color="#0000ff" />;
     }
 
-    // Group products by category after fetching
     const groupedProducts = groupProductsByCategory(products, categories);
 
-    // Function to scroll to a specific category
     const handleCategorySelect = (categorySlug: string) => {
         const categoryIndex = groupedProducts.findIndex(
             (group) => group.title.toLowerCase() === categorySlug.toLowerCase()
@@ -61,12 +62,12 @@ const Home = () => {
                 renderItem={({ item }) => (
                     <View style={styles.categoryContainer}>
                         <Text style={styles.categoryTitle}>
-                            {categories.find((cat) => cat.id === item.title)?.name || item.title} {/* Display category name */}
+                            {categories.find((cat) => cat.id === item.title)?.name || item.title}
                         </Text>
                         <FlatList
                             data={item.data}
                             renderItem={({ item }) => (
-                                <ProductListItem product={item} onImageLoad={() => {}} /> // Pass each product to ProductListItem
+                                <ProductListItem product={item} onImageLoad={() => {}} />
                             )}
                             keyExtractor={(product) => product.id.toString()}
                             numColumns={4}
@@ -77,10 +78,7 @@ const Home = () => {
                 )}
                 keyExtractor={(item) => item.title}
                 ListHeaderComponent={
-                    <ListHeader
-                        categories={categories} // Pass categories to ListHeader
-                        onCategorySelect={handleCategorySelect}
-                    />
+                    <ListHeader categories={categories} onCategorySelect={handleCategorySelect} />
                 }
                 contentContainerStyle={styles.flatListContent}
                 style={{ paddingHorizontal: 10, paddingVertical: 5 }}

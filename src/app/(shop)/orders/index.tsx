@@ -10,8 +10,7 @@ import {
 } from "react-native";
 import { getProducts, getCategories, purchaseProduct } from "../../../api/api"; // API calls to fetch data
 import { UserContext } from "../../../context/UserContext"; // Import UserContext
-
-// Assuming you have a `purchaseProduct` function in your API file
+import { useProductStore } from "../../../store/store";
 
 interface Category {
     id: number;
@@ -29,6 +28,7 @@ interface Product {
 }
 
 const BuyItemScreen = () => {
+    const { updateProductOwnership } = useProductStore(); // ✅ Call Zustand inside component
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
     const [selectedItem, setSelectedItem] = useState<Product | null>(null);
     const [categories, setCategories] = useState<Category[]>([]);
@@ -38,29 +38,28 @@ const BuyItemScreen = () => {
     const flatListRef = useRef<FlatList>(null);
     const { userData, setUserData } = useContext(UserContext);
 
-    // Fetch categories and products from the API
     useEffect(() => {
         const fetchData = async () => {
-            const token = "CuD8bDWCJxSsFtx"; // Use the appropriate token here
+            setLoading(true);
             try {
+                const token = "CuD8bDWCJxSsFtx"; // Use the appropriate token here
                 const [categoryData, productData] = await Promise.all([
                     getCategories(token),
                     getProducts(token),
                 ]);
-                setCategories(categoryData); // Set fetched categories
-                setProducts(productData); // Set fetched products
-                setSelectedCategory(categoryData[0]); // Set the first category as the default
+                setCategories(categoryData); // ✅ Set fetched categories
+                setProducts(productData); // ✅ Set fetched products
+                if (categoryData.length > 0) setSelectedCategory(categoryData[0]); // ✅ Set first category
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
-                setLoading(false); // Set loading to false once the data is fetched
+                setLoading(false);
             }
         };
 
         fetchData();
-    }, []);
+    }, []); // ✅ Runs only once
 
-    // Function to call purchase 
     const handlePurchase = async (categoryId: number) => {
         const token = "CuD8bDWCJxSsFtx";
         try {
@@ -74,10 +73,16 @@ const BuyItemScreen = () => {
                     coins: prevUserData.coins - 1, // Decrement locally
                 }));
     
+                // Get the purchased item
                 const itemsInCategory = products.filter(
-                    (product) => product.categoryId === selectedCategory?.id
+                    (product) => product.categoryId === categoryId
                 );
                 const randomItem = itemsInCategory[Math.floor(Math.random() * itemsInCategory.length)];
+    
+                // ✅ Update the purchased product as owned in Zustand store
+                updateProductOwnership(randomItem.id);
+    
+                // ✅ Show confirmation modal
                 setSelectedItem(randomItem);
                 setModalVisible(true);
             }
@@ -85,43 +90,6 @@ const BuyItemScreen = () => {
             console.error("Error purchasing item:", error);
         }
     };
-
-    const handleCategorySelect = (category: Category) => {
-        setSelectedCategory(category);
-        setSelectedItem(null); // Reset the selected item when category is changed
-    };
-
-    const onScrollEnd = (event: any) => {
-        const { contentOffset, layoutMeasurement, contentSize } =
-            event.nativeEvent;
-        const position = contentOffset.x;
-        const totalWidth = contentSize.width;
-        const itemWidth = 120; // Width of each item (including margin)
-
-        const middleOffset = categories.length * itemWidth;
-
-        if (position <= itemWidth) {
-            // If scrolled too far to the left, reset to the middle
-            flatListRef.current?.scrollToOffset({
-                offset: position + middleOffset,
-                animated: false,
-            });
-        } else if (
-            position + layoutMeasurement.width >= totalWidth - itemWidth
-        ) {
-            // If scrolled too far to the right, reset to the middle
-            flatListRef.current?.scrollToOffset({
-                offset: position - middleOffset,
-                animated: false,
-            });
-        }
-    };
-
-    const getItemLayout = (_: any, index: number) => ({
-        length: 120, // Width of each item (including margin)
-        offset: 120 * index,
-        index,
-    });
 
     if (loading) {
         return <ActivityIndicator style={styles.loader} size="large" color="#0000ff" />;
@@ -140,24 +108,20 @@ const BuyItemScreen = () => {
                             styles.categoryButton,
                             item.id === selectedCategory?.id && styles.selectedCategory,
                         ]}
-                        onPress={() => handleCategorySelect(item)}
+                        onPress={() => setSelectedCategory(item)}
                     >
                         <Image
                             source={{
-                                uri: `https://cardscape.uk:2033/groups/${item.image}.png`, // Full URL for category image
+                                uri: `https://cardscape.uk:2033/groups/${item.image}.png`,
                             }}
                             style={styles.categoryImage}
                         />
                         <Text style={styles.categoryText}>{item.name}</Text>
                     </TouchableOpacity>
                 )}
-                keyExtractor={(item, index) => `${item.id}-${index}`} // Unique key by combining id and index
+                keyExtractor={(item, index) => `${item.id}-${index}`}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.categoryList}
-                onScrollEndDrag={onScrollEnd}
-                onMomentumScrollEnd={onScrollEnd}
-                getItemLayout={getItemLayout}
-                initialScrollIndex={categories.length} // Start at the middle
             />
 
             {/* Selected Category Image */}
@@ -165,7 +129,7 @@ const BuyItemScreen = () => {
                 {selectedCategory && (
                     <Image
                         source={{
-                            uri: `https://cardscape.uk:2033/groups/${selectedCategory.image}.png`, // Full URL for selected category image
+                            uri: `https://cardscape.uk:2033/groups/${selectedCategory.image}.png`,
                         }}
                         style={styles.selectedCategoryImage}
                     />
@@ -175,7 +139,7 @@ const BuyItemScreen = () => {
             {/* Buy Button */}
             <TouchableOpacity
                 style={styles.buyButton}
-                onPress={() => handlePurchase(selectedCategory?.id ?? 0)} // Pass the selected category ID
+                onPress={() => handlePurchase(selectedCategory?.id ?? 0)}
             >
                 <Text style={styles.buyButtonText}>Buy</Text>
             </TouchableOpacity>
@@ -186,13 +150,13 @@ const BuyItemScreen = () => {
                     <View style={styles.modalContent}>
                         <TouchableOpacity
                             style={styles.closeButton}
-                            onPress={() => setModalVisible(false)} // Close the modal when clicking X
+                            onPress={() => setModalVisible(false)}
                         >
                             <Text style={styles.closeButtonText}>X</Text>
                         </TouchableOpacity>
                         <Image
                             source={{
-                                uri: `https://cardscape.uk:2033/visible/${selectedItem.image}.png`, // Full URL for product image
+                                uri: `https://cardscape.uk:2033/visible/${selectedItem.image}.png`,
                             }}
                             style={styles.modalImage}
                         />
@@ -265,7 +229,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: "rgba(0, 0, 0, 0.7)", // Semi-transparent overlay
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
         justifyContent: "center",
         alignItems: "center",
     },
@@ -274,7 +238,7 @@ const styles = StyleSheet.create({
         padding: 40,
         borderRadius: 10,
         alignItems: "center",
-        width: "80%", // Controls modal width
+        width: "80%",
     },
     closeButton: {
         position: "absolute",
