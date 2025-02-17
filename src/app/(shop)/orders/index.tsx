@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     View,
     ActivityIndicator,
+    Animated,
 } from "react-native";
 import { getProducts, getCategories, purchaseProduct } from "../../../api/api"; // API calls to fetch data
 import { UserContext } from "../../../context/UserContext"; // Import UserContext
@@ -35,6 +36,8 @@ const BuyItemScreen = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [isModalVisible, setModalVisible] = useState<boolean>(false); // State to control modal visibility
+    const [insufficientCoins, setInsufficientCoins] = useState<boolean>(false); // State for insufficient coins message
+    const opacity = useRef(new Animated.Value(0)).current; // Animated value for the banner opacity
     const flatListRef = useRef<FlatList>(null);
     const { userData, setUserData } = useContext(UserContext);
 
@@ -62,6 +65,28 @@ const BuyItemScreen = () => {
 
     const handlePurchase = async (categoryId: number) => {
         const token = "CuD8bDWCJxSsFtx";
+        
+        if (userData.coins <= 0) {
+            setInsufficientCoins(true); // Show message if coins are insufficient
+            // Trigger fade-out animation after 3 seconds
+            Animated.timing(opacity, {
+                toValue: 1,
+                duration: 0, // Instant fade-in
+                useNativeDriver: true,
+            }).start();
+
+            // Start fading out after 3 seconds
+            setTimeout(() => {
+                Animated.timing(opacity, {
+                    toValue: 0,
+                    duration: 3000, // 3 seconds fade-out duration
+                    useNativeDriver: true,
+                }).start();
+            }, 1000);
+
+            return;
+        }
+
         try {
             const response = await purchaseProduct(token, categoryId);
             console.log("Purchase response:", response);
@@ -143,6 +168,15 @@ const BuyItemScreen = () => {
             >
                 <Text style={styles.buyButtonText}>Buy</Text>
             </TouchableOpacity>
+
+            {/* Insufficient Coins Message */}
+            {insufficientCoins && (
+                <Animated.View
+                    style={[styles.insufficientCoinsContainer, { opacity }]}
+                >
+                    <Text style={styles.insufficientCoinsText}>Insufficient Coins</Text>
+                </Animated.View>
+            )}
 
             {/* Display Selected Item */}
             {selectedItem && isModalVisible && (
@@ -271,6 +305,26 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+    },
+    insufficientCoinsContainer: {
+        position: "absolute",
+        top: "50%",         // Positioning vertically at the center of the screen
+        left: "50%",        // Positioning horizontally at the center of the screen
+        transform: [
+            { translateX: -67 }, // Offset for centering based on banner's width (adjust as needed)
+            { translateY: -30 },  // Offset for centering based on banner's height (adjust as needed)
+        ],
+        backgroundColor: "rgba(255, 0, 0, 0.8)",
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        zIndex: 100,           // Ensure it's on top of other components
+        alignItems: "center",  // Center text horizontally within the banner
+    },
+    insufficientCoinsText: {
+        color: "white",
+        fontSize: 16,
+        fontWeight: "bold",
     },
 });
 

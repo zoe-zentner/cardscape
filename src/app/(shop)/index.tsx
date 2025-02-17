@@ -5,6 +5,13 @@ import { ListHeader } from "../../components/list-header";
 import { ProductListItem } from "../../components/product-list-item";
 import { groupProductsByCategory } from "../../utils/productUtils";
 import { useProductStore } from "../../store/store";
+import Auth from "../auth";
+
+// const Home = () => {
+//     return (<Auth />);
+// };
+
+// export default Home;
 
 const Home = () => {
     const { products, fetchProducts } = useProductStore(); // ✅ Call Zustand outside useEffect
