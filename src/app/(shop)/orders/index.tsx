@@ -9,8 +9,8 @@ import {
     ActivityIndicator,
     Animated,
 } from "react-native";
-import { getProducts, getCategories, purchaseProduct } from "../../../api/api"; // API calls to fetch data
-import { UserContext } from "../../../context/UserContext"; // Import UserContext
+import { getProducts, getCategories, purchaseProduct } from "../../../api/api";
+import { UserContext } from "../../../context/UserContext";
 import { useProductStore } from "../../../store/store";
 
 interface Category {
@@ -29,15 +29,15 @@ interface Product {
 }
 
 const BuyItemScreen = () => {
-    const { updateProductOwnership } = useProductStore(); // ✅ Call Zustand inside component
+    const { updateProductOwnership } = useProductStore();
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
     const [selectedItem, setSelectedItem] = useState<Product | null>(null);
     const [categories, setCategories] = useState<Category[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const [isModalVisible, setModalVisible] = useState<boolean>(false); // State to control modal visibility
-    const [insufficientCoins, setInsufficientCoins] = useState<boolean>(false); // State for insufficient coins message
-    const opacity = useRef(new Animated.Value(0)).current; // Animated value for the banner opacity
+    const [isModalVisible, setModalVisible] = useState<boolean>(false);
+    const [insufficientCoins, setInsufficientCoins] = useState<boolean>(false);
+    const opacity = useRef(new Animated.Value(0)).current;
     const flatListRef = useRef<FlatList>(null);
     const { userData, setUserData } = useContext(UserContext);
 
@@ -45,14 +45,14 @@ const BuyItemScreen = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const token = "CuD8bDWCJxSsFtx"; // Use the appropriate token here
+                const token = "CuD8bDWCJxSsFtx";
                 const [categoryData, productData] = await Promise.all([
                     getCategories(token),
                     getProducts(token),
                 ]);
-                setCategories(categoryData); // ✅ Set fetched categories
-                setProducts(productData); // ✅ Set fetched products
-                if (categoryData.length > 0) setSelectedCategory(categoryData[0]); // ✅ Set first category
+                setCategories(categoryData);
+                setProducts(productData);
+                if (categoryData.length > 0) setSelectedCategory(categoryData[0]);
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
@@ -61,53 +61,63 @@ const BuyItemScreen = () => {
         };
 
         fetchData();
-    }, []); // ✅ Runs only once
+    }, []);
+
+    // Extend the categories array for seamless scrolling
+    const extendedCategories = [...categories, ...categories, ...categories];
+
+    // Scroll to middle initially
+    useEffect(() => {
+        if (flatListRef.current && categories.length > 0) {
+            flatListRef.current.scrollToIndex({
+                index: categories.length,
+                animated: false,
+            });
+        }
+    }, [categories]);
+
+    const handleCategorySelect = (category: Category) => {
+        setSelectedCategory(category);
+        setSelectedItem(null);
+    };
 
     const handlePurchase = async (categoryId: number) => {
         const token = "CuD8bDWCJxSsFtx";
         
         if (userData.coins <= 0) {
-            setInsufficientCoins(true); // Show message if coins are insufficient
-            // Trigger fade-out animation after 3 seconds
+            setInsufficientCoins(true);
             Animated.timing(opacity, {
                 toValue: 1,
-                duration: 0, // Instant fade-in
+                duration: 0,
                 useNativeDriver: true,
             }).start();
 
-            // Start fading out after 3 seconds
             setTimeout(() => {
                 Animated.timing(opacity, {
                     toValue: 0,
-                    duration: 3000, // 3 seconds fade-out duration
+                    duration: 3000,
                     useNativeDriver: true,
                 }).start();
             }, 1000);
-
             return;
         }
 
         try {
             const response = await purchaseProduct(token, categoryId);
-            console.log("Purchase response:", response);
     
             if (response === "ok") {
-                // Update the global userData state after purchase
                 setUserData((prevUserData: any) => ({
                     ...prevUserData,
-                    coins: prevUserData.coins - 1, // Decrement locally
+                    coins: prevUserData.coins - 1,
                 }));
     
-                // Get the purchased item
                 const itemsInCategory = products.filter(
                     (product) => product.categoryId === categoryId
                 );
                 const randomItem = itemsInCategory[Math.floor(Math.random() * itemsInCategory.length)];
     
-                // ✅ Update the purchased product as owned in Zustand store
                 updateProductOwnership(randomItem.id);
     
-                // ✅ Show confirmation modal
                 setSelectedItem(randomItem);
                 setModalVisible(true);
             }
@@ -116,16 +126,42 @@ const BuyItemScreen = () => {
         }
     };
 
+    const onScrollEnd = (event: any) => {
+        const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent;
+        const position = contentOffset.x;
+        const totalWidth = contentSize.width;
+        const itemWidth = 120;
+
+        const middleOffset = categories.length * itemWidth;
+
+        if (position <= itemWidth) {
+            flatListRef.current?.scrollToOffset({
+                offset: position + middleOffset,
+                animated: false,
+            });
+        } else if (position + layoutMeasurement.width >= totalWidth - itemWidth) {
+            flatListRef.current?.scrollToOffset({
+                offset: position - middleOffset,
+                animated: false,
+            });
+        }
+    };
+
+    const getItemLayout = (_: any, index: number) => ({
+        length: 120,
+        offset: 120 * index,
+        index,
+    });
+
     if (loading) {
         return <ActivityIndicator style={styles.loader} size="large" color="#0000ff" />;
     }
 
     return (
         <View style={styles.container}>
-            {/* Category Scroller */}
             <FlatList
                 ref={flatListRef}
-                data={categories}
+                data={extendedCategories}
                 horizontal
                 renderItem={({ item }) => (
                     <TouchableOpacity
@@ -133,7 +169,7 @@ const BuyItemScreen = () => {
                             styles.categoryButton,
                             item.id === selectedCategory?.id && styles.selectedCategory,
                         ]}
-                        onPress={() => setSelectedCategory(item)}
+                        onPress={() => handleCategorySelect(item)}
                     >
                         <Image
                             source={{
@@ -147,21 +183,12 @@ const BuyItemScreen = () => {
                 keyExtractor={(item, index) => `${item.id}-${index}`}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.categoryList}
+                onScrollEndDrag={onScrollEnd}
+                onMomentumScrollEnd={onScrollEnd}
+                getItemLayout={getItemLayout}
+                initialScrollIndex={categories.length}
             />
 
-            {/* Selected Category Image */}
-            <View style={styles.selectedCategoryContainer}>
-                {selectedCategory && (
-                    <Image
-                        source={{
-                            uri: `https://cardscape.uk:2033/groups/${selectedCategory.image}.png`,
-                        }}
-                        style={styles.selectedCategoryImage}
-                    />
-                )}
-            </View>
-
-            {/* Buy Button */}
             <TouchableOpacity
                 style={styles.buyButton}
                 onPress={() => handlePurchase(selectedCategory?.id ?? 0)}
@@ -169,16 +196,12 @@ const BuyItemScreen = () => {
                 <Text style={styles.buyButtonText}>Buy</Text>
             </TouchableOpacity>
 
-            {/* Insufficient Coins Message */}
             {insufficientCoins && (
-                <Animated.View
-                    style={[styles.insufficientCoinsContainer, { opacity }]}
-                >
+                <Animated.View style={[styles.insufficientCoinsContainer, { opacity }]}>
                     <Text style={styles.insufficientCoinsText}>Insufficient Coins</Text>
                 </Animated.View>
             )}
 
-            {/* Display Selected Item */}
             {selectedItem && isModalVisible && (
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
@@ -202,6 +225,7 @@ const BuyItemScreen = () => {
         </View>
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {

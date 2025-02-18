@@ -61,12 +61,6 @@ export const ListHeader = ({ onCategorySelect, categories }: ListHeaderProps) =>
                     </Link>
                 </View>
             </View>
-            <View style={styles.heroContainer}>
-                <Image
-                    source={require("../../assets/images/hero.png")}
-                    style={styles.heroImage}
-                />
-            </View>
             <View style={styles.categoriesContainer}>
                 <Text style={styles.sectionTitle}>Categories</Text>
                 <FlatList
