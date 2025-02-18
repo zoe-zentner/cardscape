@@ -1,15 +1,23 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+# 📌 GitHub Docs: https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
-# dependencies
+### 🏗️ Dependencies ###
 node_modules/
+*.tsbuildinfo # TypeScript build cache
 
-# Expo
+### 📦 Expo ###
 .expo/
-dist/
+.expo-shared/
+.expo-shared/
+.expo-env.d.ts
 web-build/
-expo-env.d.ts
+dist/
+build/
+eas.json # Expo Application Services config file
+*.expo*
 
-# Native
+### 📱 Native (Android & iOS) ###
+android/
+ios/
 *.orig.*
 *.jks
 *.p8
@@ -17,37 +25,45 @@ expo-env.d.ts
 *.key
 *.mobileprovision
 
-# Metro
-.metro-health-check*
+### 🚀 Android ###
+android/.gradle/
+android/app/.cxx/
+android/app/.gradle/
+android/.idea/
+android/app/build/
 
-# debug
+### 🍎 iOS ###
+ios/build/
+ios/Pods/
+ios/*.xcodeproj/
+ios/*.xcworkspace/
+ios/*.xcuserdata/
+ios/*.pbxproj
+
+### 🔧 Metro & Debug ###
+.metro-health-check*
 npm-debug.*
 yarn-debug.*
 yarn-error.*
 
-# macOS
+### 💻 macOS ###
 .DS_Store
 *.pem
 
-# local env files
+### 🌎 Local Environment Files ###
 .env*.local
 
-# typescript
-*.tsbuildinfo
+### 🖼️ Ignore All Images in Assets ###
+assets/images/
+assets/images/**/*.{png,jpg,jpeg,gif,svg,webp}
+assets/characters/
+assets/characters/**/*.{png,jpg,jpeg,gif,svg,webp}
 
-# Ignore all images inside assets/images/ and assets/characters/
-assets/images/*
-assets/images/**/*.png
-assets/images/**/*.jpg
-assets/images/**/*.jpeg
-assets/images/**/*.gif
-assets/images/**/*.svg
-assets/images/**/*.webp
+### 🚀 Expo Build Artifacts ###
+app.json
+app.config.js
 
-assets/characters/*
-assets/characters/**/*.png
-assets/characters/**/*.jpg
-assets/characters/**/*.jpeg
-assets/characters/**/*.gif
-assets/characters/**/*.svg
-assets/characters/**/*.webp
+### 🔄 Temporary Files ###
+*.log
+*.tmp
+*.lock
