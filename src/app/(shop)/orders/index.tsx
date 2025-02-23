@@ -81,9 +81,9 @@ const BuyItemScreen = () => {
         setSelectedItem(null);
     };
 
-    const handlePurchase = async (categoryId: number) => {
+    const handlePurchase = async (categoryId: any) => {
         if (!userData || !userData.token) return; // Ensure the token exists
-
+    
         if (userData.coins <= 0) {
             setInsufficientCoins(true);
             Animated.timing(opacity, {
@@ -91,7 +91,7 @@ const BuyItemScreen = () => {
                 duration: 0,
                 useNativeDriver: true,
             }).start();
-
+    
             setTimeout(() => {
                 Animated.timing(opacity, {
                     toValue: 0,
@@ -101,30 +101,49 @@ const BuyItemScreen = () => {
             }, 1000);
             return;
         }
-
-        try {
-            const response = await purchaseProduct(userData.token, categoryId); // Use token from UserContext
     
-            if (response === "ok") {
+        try {
+            // Make the API call
+            const response = await fetch('https://cardscape.uk:2033/purchase?token=' + userData.token, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ categoryId }), // Send the categoryId
+            });
+    
+            // Ensure the response is in JSON format
+            const responseData = await response.json(); // This automatically parses the response as JSON
+    
+            console.log("Response from backend:", responseData); // Log the response
+    
+            if (responseData && responseData.productId) {
+                const productId = responseData.productId;
+    
+                // Reduce coins
                 setUserData((prevUserData: any) => ({
                     ...prevUserData,
                     coins: prevUserData.coins - 1,
                 }));
     
-                const itemsInCategory = products.filter(
-                    (product) => product.categoryId === categoryId
-                );
-                const randomItem = itemsInCategory[Math.floor(Math.random() * itemsInCategory.length)];
+                // Find the purchased product from the products list using the productId
+                const purchasedItem = products.find((item) => item.id === productId);
     
-                updateProductOwnership(randomItem.id);
+                if (purchasedItem) {
+                    // Update the product ownership in the store
+                    updateProductOwnership(purchasedItem.id);
     
-                setSelectedItem(randomItem);
-                setModalVisible(true);
+                    // Set the selected item to the purchased item
+                    setSelectedItem(purchasedItem);
+                    setModalVisible(true); // Show modal with the purchased item details
+                }
+            } else {
+                console.error("Error: Response did not contain productId.");
             }
         } catch (error) {
             console.error("Error purchasing item:", error);
         }
-    };
+    };    
 
     const onScrollEnd = (event: any) => {
         const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent;
