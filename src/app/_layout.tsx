@@ -7,8 +7,8 @@ import { AuthHandler } from "../components/auth-handler"; // Import the AuthHand
 export default function RootLayout() {
     return (
         <AuthProvider>
-            <UserProvider> {/* Wrap inside UserProvider */}
-                <AuthHandler /> {/* Handles auth & navigation */}
+            <UserProvider> 
+                <AuthHandler /> 
                 <ToastProvider>
                     <Stack>
                         <Stack.Screen name="auth" options={{ headerShown: false }} />
