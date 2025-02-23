@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useLocalSearchParams, Redirect, Stack,} from "expo-router";
 import { useRouter } from "expo-router";
 import { getProducts } from "../../api/api"; // Your API fetching function
+import { UserContext } from "../../context/UserContext"; // Import the user context
 
 const ProductDetails = () => {
     const { id } = useLocalSearchParams<{ id: string }>(); // Get the product id from URL
@@ -10,6 +11,7 @@ const ProductDetails = () => {
     const [relatedProducts, setRelatedProducts] = useState<any[]>([]); // Store related products
     const [loading, setLoading] = useState<boolean>(true); // Loading state
     const router = useRouter(); // Get the router object
+    const { userData } = useContext(UserContext); // Get the user object from context
 
     // Function to generate the image URL based on the server configuration and ownership
     const getImageUrl = (imageName: string, owned: number) => {
@@ -20,7 +22,7 @@ const ProductDetails = () => {
 
     useEffect(() => {
         const fetchProductDetails = async () => {
-            const token = "CuD8bDWCJxSsFtx"; // Replace with the actual token
+            const token = userData.token; // Replace with the actual token
             try {
                 // Fetch products from API
                 const productsData = await getProducts(token);

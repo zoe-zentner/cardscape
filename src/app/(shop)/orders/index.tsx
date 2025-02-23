@@ -45,10 +45,10 @@ const BuyItemScreen = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const token = "CuD8bDWCJxSsFtx";
+                if (!userData || !userData.token) return; // Ensure the token exists
                 const [categoryData, productData] = await Promise.all([
-                    getCategories(token),
-                    getProducts(token),
+                    getCategories(userData.token), // Use token from UserContext
+                    getProducts(userData.token),    // Use token from UserContext
                 ]);
                 setCategories(categoryData);
                 setProducts(productData);
@@ -61,7 +61,7 @@ const BuyItemScreen = () => {
         };
 
         fetchData();
-    }, []);
+    }, [userData]); // Run when userData (and hence token) changes
 
     // Extend the categories array for seamless scrolling
     const extendedCategories = [...categories, ...categories, ...categories];
@@ -82,8 +82,8 @@ const BuyItemScreen = () => {
     };
 
     const handlePurchase = async (categoryId: number) => {
-        const token = "CuD8bDWCJxSsFtx";
-        
+        if (!userData || !userData.token) return; // Ensure the token exists
+
         if (userData.coins <= 0) {
             setInsufficientCoins(true);
             Animated.timing(opacity, {
@@ -103,7 +103,7 @@ const BuyItemScreen = () => {
         }
 
         try {
-            const response = await purchaseProduct(token, categoryId);
+            const response = await purchaseProduct(userData.token, categoryId); // Use token from UserContext
     
             if (response === "ok") {
                 setUserData((prevUserData: any) => ({
@@ -226,7 +226,6 @@ const BuyItemScreen = () => {
     );
 };
 
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -332,18 +331,18 @@ const styles = StyleSheet.create({
     },
     insufficientCoinsContainer: {
         position: "absolute",
-        top: "50%",         // Positioning vertically at the center of the screen
-        left: "50%",        // Positioning horizontally at the center of the screen
+        top: "50%",
+        left: "50%",
         transform: [
-            { translateX: -67 }, // Offset for centering based on banner's width (adjust as needed)
-            { translateY: -30 },  // Offset for centering based on banner's height (adjust as needed)
+            { translateX: -67 },
+            { translateY: -30 },
         ],
         backgroundColor: "rgba(255, 0, 0, 0.8)",
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 5,
-        zIndex: 100,           // Ensure it's on top of other components
-        alignItems: "center",  // Center text horizontally within the banner
+        zIndex: 100,
+        alignItems: "center",
     },
     insufficientCoinsText: {
         color: "white",

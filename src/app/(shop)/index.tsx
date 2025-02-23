@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { FlatList, StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { getCategories } from "../../api/api";
 import { ListHeader } from "../../components/list-header";
 import { ProductListItem } from "../../components/product-list-item";
 import { groupProductsByCategory } from "../../utils/productUtils";
 import { useProductStore } from "../../store/store";
-import Auth from "../auth";
+import { UserContext } from "../../context/UserContext";
 
 // const Home = () => {
 //     return (<Auth />);
@@ -17,6 +17,7 @@ const Home = () => {
     const { products, fetchProducts } = useProductStore(); // ✅ Call Zustand outside useEffect
     const [categories, setCategories] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const { userData } = useContext(UserContext);
     const flatListRef = useRef<FlatList>(null);
 
     useEffect(() => {
@@ -25,9 +26,9 @@ const Home = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                await fetchProducts(); // ✅ Call Zustand store function here
-                const token = "CuD8bDWCJxSsFtx";
-                const categoryData = await getCategories(token);
+                if (!userData || !userData.token) return; // ✅ Ensure token exists
+                await fetchProducts(userData.token); // ✅ Use dynamic token
+                const categoryData = await getCategories(userData.token); // ✅ Use dynamic token
                 if (isMounted) setCategories(categoryData);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -39,9 +40,9 @@ const Home = () => {
         fetchData();
 
         return () => {
-            isMounted = false; // ✅ Cleanup function to prevent memory leaks
+            isMounted = false; // ✅ Cleanup function
         };
-    }, [fetchProducts]); // ✅ Ensure dependencies are correctly handled
+    }, [fetchProducts, userData]); // ✅ Depend on userData to refetch when it changes
 
     if (loading) {
         return <ActivityIndicator style={styles.loader} size="large" color="#0000ff" />;

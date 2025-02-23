@@ -1,39 +1,24 @@
 import { Stack } from "expo-router";
 import { ToastProvider } from "react-native-toast-notifications";
-import { UserProvider } from "../context/UserContext"; // Import UserContext
+import { AuthProvider } from "../context/AuthContext";
+import { UserProvider } from "../context/UserContext"; // Import UserProvider
+import { AuthHandler } from "../components/auth-handler"; // Import the AuthHandler
 
 export default function RootLayout() {
     return (
-        <UserProvider>
-            <ToastProvider>
-                <Stack>
-                    <Stack.Screen
-                        name="(shop)"
-                        options={{
-                            headerShown: false,
-                            title: "Shop",
-                            headerTitleAlign: "center",
-                        }}
-                    />
-                    <Stack.Screen
-                        name="categories"
-                        options={{ headerShown: true, title: "Categories" }}
-                    />
-                    <Stack.Screen
-                        name="product"
-                        options={{ headerShown: false, title: "Product" }}
-                    />
-                    <Stack.Screen
-                        name="cart"
-                        options={{
-                            presentation: "modal",
-                            title: "Shopping Cart",
-                            headerTitleAlign: "center",
-                        }}
-                    />
-                    <Stack.Screen name="auth" options={{ headerShown: true }} />
-                </Stack>
-            </ToastProvider>
-        </UserProvider>
+        <AuthProvider>
+            <UserProvider> {/* Wrap inside UserProvider */}
+                <AuthHandler /> {/* Handles auth & navigation */}
+                <ToastProvider>
+                    <Stack>
+                        <Stack.Screen name="auth" options={{ headerShown: false }} />
+                        <Stack.Screen name="(shop)" options={{ headerShown: false }} />
+                        <Stack.Screen name="categories" options={{ headerShown: true }} />
+                        <Stack.Screen name="product" options={{ headerShown: false }} />
+                        <Stack.Screen name="cart" options={{ presentation: "modal", title: "Shopping Cart" }} />
+                    </Stack>
+                </ToastProvider>
+            </UserProvider>
+        </AuthProvider>
     );
 }

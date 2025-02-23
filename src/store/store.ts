@@ -11,15 +11,14 @@ interface Product {
 
 interface ProductStore {
     products: Product[];
-    fetchProducts: () => Promise<void>;
+    fetchProducts: (token: string) => Promise<void>;
     updateProductOwnership: (productId: number) => void;
 }
 
-export const useProductStore = create<ProductStore>((set, get) => ({
+export const useProductStore = create<ProductStore>((set) => ({
     products: [],
 
-    fetchProducts: async () => {
-        const token = "CuD8bDWCJxSsFtx";
+    fetchProducts: async (token) => {
         try {
             const productData = await getProducts(token);
             set({ products: productData });

@@ -6,7 +6,7 @@ const screenWidth = Dimensions.get("window").width;
 const itemWidth = (screenWidth - 40) / 4;
 
 export const ProductListItem = ({ product, onImageLoad }: { product: any; onImageLoad: () => void }) => {
-    // Function to generate the image URL based on the server configuration and ownership
+    // Function to generate the image URL based on the server configuration and ownconst { userData } = useContext(UserContext);ership
     const getImageUrl = (imageName: string, owned: number) => {
         const baseUrl = "https://cardscape.uk:2033/";
         const folder = owned === 1 ? "visible" : "hidden";
