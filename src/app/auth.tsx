@@ -11,36 +11,38 @@ export default function Auth() {
 
     const handleLogin = async () => {
         try {
+            const normalizedEmail = email.trim().toLowerCase(); // Convert email to lowercase
+    
             const response = await fetch("https://cardscape.uk:2033/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email: normalizedEmail, password }),
             });
-
+    
             const data = await response.json(); // Parse response as JSON
-            console.log("Raw response:", data); // Debugging log
-
+            // console.log("Raw response:", data); // Debugging log
+    
             if (!response.ok || !data.token) {  
                 Alert.alert("Login Failed", data.error || "Invalid email or password");
                 return;
             }
-
+    
             const token = data.token; // Extract token from response
-            console.log("Login token:", token); // Debugging
-
+            // console.log("Login token:", token); // Debugging
+    
             // Store token in AsyncStorage
             await AsyncStorage.setItem("token", token);
-
+    
             // Fetch user details after login
             fetchUserData(token);
-
+    
             Alert.alert("Login Successful!");
             router.replace("/"); // Redirect to home page
         } catch (error) {
             console.error("Fetch error:", error);
             Alert.alert("Error", "Something went wrong. Please try again.");
         }
-    };
+    };    
 
     // Function to fetch user data after login
     const fetchUserData = async (token: string) => {
