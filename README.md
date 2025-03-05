@@ -19,10 +19,23 @@ Cardscape allows users to collect cards from various categories, manage their co
 
 ## Technologies Used
 
+### Frontend
 - **React Native**: For building the mobile interface and user experience.
 - **TypeScript**: For maintaining the type safety of the project.
-- **SQLite3**: For managing user data, card collections, and in-game purchases.
-- **JavaScript**: For implementing the game logic, handling user interactions, and managing the flow of the application.
+
+### Backend
+- **Java:** For server-side logic.
+- **SQLite3:** For user data and card collection storage.
+- **API:** Exposes a REST API for the frontend to manage logins, card data, and purchases.
+
+## Backend Information
+The backend code is currently hosted on CodebaseHQ, a private platform used during development. As a result, the backend repository is not publicly available at this time. However, the backend:
+
+- Authenticates users.
+- Tracks user information including card ownership and coin balances.
+- Provides card data to the frontend via a REST API.
+
+This README will be updated when the backend is publicly available.
 
 ## Installation
 
