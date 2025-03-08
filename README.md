@@ -4,7 +4,33 @@ Cardscape is a card collection game where users can collect and manage their car
 
 ## Demo
 
-Images coming soon!
+This app is still in progress so images will be updated periodically.
+
+<table>
+  <tr>
+    <td align="center"><b>Login Screen</b></td>
+    <td align="center"><b>Failed Login</b></td>
+    <td align="center"><b>Successful Login</b></td>
+  </tr>
+  <tr>
+    <td><img src="images/readme-assets/login-screen.jpeg" alt="Login Screen" width="250"/></td>
+    <td><img src="images/readme-assets/login-failed.jpeg" alt="Failed Login" width="250"/></td>
+    <td><img src="images/readme-assets/login-successful.jpeg" alt="Successful Login" width="250"/></td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td align="center"><b>Main Screen</b></td>
+    <td align="center"><b>Buy Item Screen</b></td>
+    <td align="center"><b>Mancel (Item) Bought</b></td>
+  </tr>
+  <tr>
+    <td><img src="images/readme-assets/main-screen.jpeg" alt="Main Screen" width="250"/></td>
+    <td><img src="images/readme-assets/buy-item-screen.jpeg" alt="Buy Item Screen" width="250"/></td>
+    <td><img src="images/readme-assets/manacle-bought.jpeg" alt="Mancel Bought" width="250"/></td>
+  </tr>
+</table>
 
 ## About The Game
 
@@ -88,6 +114,6 @@ Thanks to the open-source community for providing the libraries and frameworks u
 ## Contact
 If you have any questions or feedback, feel free to reach out to me:
 
-Email: zbz494@student.bham.ac.uk
+Email: zoe.b.zentner@gmail.com
 GitHub: zoe-zentner
 LinkedIn: zoe-zentner
