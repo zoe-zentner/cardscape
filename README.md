@@ -1,6 +1,6 @@
 # Cardscape
 
-Cardscape is a card collection game where users can collect and manage their cards, purchase new ones from different categories, and track their progress. Each user has a personal collection of cards that they can view, with the card's ownership status reflected in its color (greyscale for cards they don’t own).
+Cardscape is a Hirono card collection game where users can collect and manage their cards, purchase new ones from different categories, and track their progress. Each user has a personal collection of cards that they can view, with the card's ownership status reflected in its color (greyscale for cards they don’t own).
 
 ## Demo
 
